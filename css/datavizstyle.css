@@ -1,0 +1,229 @@
+
+#isPhone, #isMobile {
+    display: none;
+    width: 0;
+    height: 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+
+
+
+
+.svg-container article {
+
+  float: left;
+  clear: left;
+  margin-right: .2em;
+
+
+}
+
+
+.ui-selectmenu-button.ui-button {
+  height: 35px !important;
+}
+
+
+#nav-options {
+    position: relative;
+    width: 100%;
+    height: 150px;
+    margin-bottom: 30px;
+}
+
+#slider {
+  width: 65%;
+  padding-top: 10px;
+  float: left;
+  height: 100px;
+}
+
+.dropdown-div {
+  padding: 1em 1em;
+}
+
+
+
+
+
+hr {
+    width: 200px;
+    border: 0 !important;
+    height: 1px;
+    border-bottom: 6px solid #1696d2 !important;
+    border-bottom-color: #1696d2 !important;
+    color: #1696d2 !important;
+    margin-top: 45px !important;
+    margin-bottom: 45px !important;
+    margin-right: 100%;
+    display: block;
+    float: left;
+
+}
+
+
+
+.content{
+    margin: 0 auto;
+    padding: 0px 30px;
+
+}
+
+
+
+
+
+#map {
+  position: relative;
+}
+
+
+
+
+
+/*MAP LEGEND*/
+
+
+
+svg.legend-text-div {
+  position: relative;
+  word-wrap: break-word;
+  float: right;
+  width: 2em;
+
+}
+
+
+
+
+
+
+/*INFO TEXT*/
+.header {
+  font-family: "Lato", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.text-subheader, .text-subheader-mobile {
+  font-family: "Lato", sans-serif;
+  font-size: 11px;
+  fill: #9d9d9d;
+}
+
+body{  font-family: "Lato", sans-serif;
+  font-size: 11px;
+}
+
+
+
+
+/*STATE SQUARE*/
+
+.state.selected {
+fill:#fdbf11 !important;
+}
+
+.place-label {
+    fill: #444;
+    font-family: "Lato", sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    cursor: pointer;
+    pointer-events: none;
+ }
+
+ path {
+   cursor: pointer;
+ }
+
+.ui-selectmenu-text {
+  font-size: 17px;
+  margin-right: 1px;
+  margin-left: 1px;
+  overflow: visible !important;
+}
+
+
+/*ADJUSTING FOR SCREEN WIDTHS */
+
+  
+
+@media (max-width: 479px) {
+
+
+  #inset {
+    width: 100%;
+    max-width: none;
+    min-width: 0px;
+    margin-left: 0px;
+    float: left;
+    border-left-style: none;
+    padding-left: 0px !important;
+  }
+  
+  .place-label {
+    font-size: 9px !important;
+  }
+
+
+
+
+
+}
+
+
+ @media (max-width: 600px) {
+
+
+
+
+  .ui-widget {
+    font-size: .8em !important;
+  }
+
+
+  .place-label {
+    font-size: 10px;
+  }
+  
+  #isPhone{
+    display: block !important;
+  }
+  .main-content {
+    width: auto;
+  }
+  .wrapper {
+    width: auto !important;
+  }
+
+
+
+  }
+
+
+@media (max-width: 768px){
+  #isMobile {
+    display: block;
+  }
+
+ 
+
+
+
+
+
+}
+
+  @media (max-width: 1015px) {
+
+  }
+
+
+
+
+
+
