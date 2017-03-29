@@ -86,33 +86,57 @@ function drawGridMap(container_width){
 
   /*DATA SOURCES*/
 
-  d3.json("data/state_squares.geojson", function(error1, jsonResults) {
-      d3.csv("data/integration.csv", function(error2, csvResults) { 
-        csvResults.forEach(function(csvState){
-          var state = csvState.abbr
-          jsonState = jsonResults.features.filter(function(d){
-            return d.properties.abbr == state
-          })
-          for (i=0; i<=16; i++){
-            if(typeof(jsonState[0]) != "undefined"){
+  // d3.json("data/state_squares.geojson", function(error1, jsonResults) {
+  //     d3.csv("data/integration.csv", function(error2, csvResults) { 
+  //       csvResults.forEach(function(csvState){
+  //         var state = csvState.abbr
+  //         jsonState = jsonResults.features.filter(function(d){
+  //           return d.properties.abbr == state
+  //         })
+  //         for (i=0; i<=16; i++){
+  //           if(typeof(jsonState[0]) != "undefined"){
               
-            jsonState[0].properties["tuition_" + i] = csvState["tuition_" + i];
-            jsonState[0].properties["financial_" + i] = csvState["financial_" + i];
-            jsonState[0].properties["driver_" + i] = csvState["driver_" + i];
-            jsonState[0].properties["ban_" + i] = csvState["ban_" + i];
-            jsonState[0].properties["english_" + i] = csvState["english_" + i];
+  //           jsonState[0].properties["tuition_" + i] = csvState["tuition_" + i];
+  //           jsonState[0].properties["financial_" + i] = csvState["financial_" + i];
+  //           jsonState[0].properties["driver_" + i] = csvState["driver_" + i];
+  //           jsonState[0].properties["ban_" + i] = csvState["ban_" + i];
+  //           jsonState[0].properties["english_" + i] = csvState["english_" + i];
 
-            }
+  //           }
 
-          }
-        })
+  //         }
+  //       })
 
-        choropleth = new Choropleth(jsonResults);
+  //       choropleth = new Choropleth(jsonResults);
 
-    });
+  //   });
 
-  });
+  // });
+d3.csv("data/policy_year_description.csv", function(error1, csv_data_1){
+  d3.csv("data/policy_values_only.csv", function(error1, csv_data_2){
 
+          var policy_year_data = d3.nest()
+                .key(function(d) { return d.category; })
+                .key(function(d) { return d.policy_short; })
+                .key(function(d) { return d.policy_year; })
+
+                .entries(csv_data_1);
+
+                console.log(policy_year_data)
+   
+          // var policy_value_data = d3.nest()
+          //       .key(function(d, i) { 
+          //         for (i=0; i<=16; i++){
+
+          //         return d.category;
+          //         } 
+          //       })
+          //       .key(function(d) { return d.policy_short; })
+          //       .entries(csv_data_1);       
+
+
+  })
+})
 
   function Choropleth(states) {
 
@@ -153,114 +177,114 @@ function drawGridMap(container_width){
   //           .call(wrapText, wrapWidth)
   // }
 
-    chartMap.svg = d3.select("#map")
-      .append("svg")
-      .attr("width", width*.65)
-      .attr("height", height*.8);
+ //    chartMap.svg = d3.select("#map")
+ //      .append("svg")
+ //      .attr("width", width*.65)
+ //      .attr("height", height*.8);
 
-    chartMap.map = chartMap.svg.append('g')
-      .selectAll('path')
-      .data(states.features)
-      .enter().append('path')
-      .attr('d', path)
-      .attr("id", function(d){return "square-" + d.properties.abbr})
-      .attr('class', function(d) {
-        return 'state ' + d.properties.abbr + ' dehovered '
-      })
+ //    chartMap.map = chartMap.svg.append('g')
+ //      .selectAll('path')
+ //      .data(states.features)
+ //      .enter().append('path')
+ //      .attr('d', path)
+ //      .attr("id", function(d){return "square-" + d.properties.abbr})
+ //      .attr('class', function(d) {
+ //        return 'state ' + d.properties.abbr + ' dehovered '
+ //      })
 
-    chartMap.svg
-      .selectAll(".place-label")
-      .data(states.features)
-      .enter().append("text")
-      .attr("class", "place-label")
-      .attr("id", function(d){ return "label-" + d.properties.abbr})
-      .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
-      .attr("dy", ".5em")
-      .attr("dx", "-.7em")
-      .text(function(d) { 
-        return d.properties.abbr;
-      });
+ //    chartMap.svg
+ //      .selectAll(".place-label")
+ //      .data(states.features)
+ //      .enter().append("text")
+ //      .attr("class", "place-label")
+ //      .attr("id", function(d){ return "label-" + d.properties.abbr})
+ //      .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
+ //      .attr("dy", ".5em")
+ //      .attr("dx", "-.7em")
+ //      .text(function(d) { 
+ //        return d.properties.abbr;
+ //      });
         
- //  chartMap.states = states;
+ // //  chartMap.states = states;
 
 
-    chartMap.map
-      .style("fill", function(d) {
-          return color(d.properties.tuition_16);
-      })
+ //    chartMap.map
+ //      .style("fill", function(d) {
+ //          return color(d.properties.tuition_16);
+ //      })
 
 
-    //STATE TEXT INFO
-    var stateTextX = (IS_PHONE) ? width*.09 : width*.26
-    chartMap.svg2 = d3.select("#map")
-          .append("svg")
-          .attr("width", width*.3)
-          .attr("height", height*.8)
-    var stateText = chartMap.svg2.append("g")
+ //    //STATE TEXT INFO
+ //    var stateTextX = (IS_PHONE) ? width*.09 : width*.26
+ //    chartMap.svg2 = d3.select("#map")
+ //          .append("svg")
+ //          .attr("width", width*.3)
+ //          .attr("height", height*.8)
+ //    var stateText = chartMap.svg2.append("g")
 
-    stateText.append("text")
-      .attr("class", "header")
-      .attr("transform", function() { return "translate("+ width*.26+", " + width*.1 + ")"; })
-      .html("Year")
-    stateText.append("text")
-      .attr("class", "header")
-      .attr("transform", function() { return "translate("+ width*.13+", " + width*.2 + ")"; })
-      .html("Policy Description")
+ //    stateText.append("text")
+ //      .attr("class", "header")
+ //      .attr("transform", function() { return "translate("+ width*.26+", " + width*.1 + ")"; })
+ //      .html("Year")
+ //    stateText.append("text")
+ //      .attr("class", "header")
+ //      .attr("transform", function() { return "translate("+ width*.13+", " + width*.2 + ")"; })
+ //      .html("Policy Description")
   
-    stateText.append("text")
-      .attr("class", "text-body")
-      .attr("transform", function() { return "translate("+ width*.26+", " + width*.15 + ")"; })
-      .html("")  
+ //    stateText.append("text")
+ //      .attr("class", "text-body")
+ //      .attr("transform", function() { return "translate("+ width*.26+", " + width*.15 + ")"; })
+ //      .html("")  
 
 
 
 
-    $("#dropdown-menu-category")
-      .selectmenu({
-         open: function( event, ui ) {
-            // d3.select("body").style("height", (d3.select(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").node().getBoundingClientRect().height*1.3) + "px")
-            // pymChild.sendHeight();
-          },
-          close: function(event, ui){
-            // d3.select("body").style("height", null)
-            // pymChild.sendHeight();
-          },
-         change: function(event, d){
-              // var value = this.value
-              // var selectedIndex = this.selectedIndex
-              // var selectedData = (data[selectedIndex])
-              // var name = (data[selectedIndex]["CZ"])
-              // var idClass = "id_" + value
+ //    $("#dropdown-menu-category")
+ //      .selectmenu({
+ //         open: function( event, ui ) {
+ //            // d3.select("body").style("height", (d3.select(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").node().getBoundingClientRect().height*1.3) + "px")
+ //            // pymChild.sendHeight();
+ //          },
+ //          close: function(event, ui){
+ //            // d3.select("body").style("height", null)
+ //            // pymChild.sendHeight();
+ //          },
+ //         change: function(event, d){
+ //              // var value = this.value
+ //              // var selectedIndex = this.selectedIndex
+ //              // var selectedData = (data[selectedIndex])
+ //              // var name = (data[selectedIndex]["CZ"])
+ //              // var idClass = "id_" + value
          
-          }
-      })     
+ //          }
+ //      })     
                   
-      .selectmenu( "menuWidget" )
-      .addClass( "ui-menu-icons customicons" );
+ //      .selectmenu( "menuWidget" )
+ //      .addClass( "ui-menu-icons customicons" );
 
 
-    $("#dropdown-menu-policy")
-      .selectmenu({
-         open: function( event, ui ) {
-            // d3.select("body").style("height", (d3.select(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").node().getBoundingClientRect().height*1.3) + "px")
-            // pymChild.sendHeight();
-          },
-          close: function(event, ui){
-            // d3.select("body").style("height", null)
-            // pymChild.sendHeight();
-          },
-         change: function(event, d){
-              // var value = this.value
-              // var selectedIndex = this.selectedIndex
-              // var selectedData = (data[selectedIndex])
-              // var name = (data[selectedIndex]["CZ"])
-              // var idClass = "id_" + value
+ //    $("#dropdown-menu-policy")
+ //      .selectmenu({
+ //         open: function( event, ui ) {
+ //            // d3.select("body").style("height", (d3.select(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").node().getBoundingClientRect().height*1.3) + "px")
+ //            // pymChild.sendHeight();
+ //          },
+ //          close: function(event, ui){
+ //            // d3.select("body").style("height", null)
+ //            // pymChild.sendHeight();
+ //          },
+ //         change: function(event, d){
+ //              // var value = this.value
+ //              // var selectedIndex = this.selectedIndex
+ //              // var selectedData = (data[selectedIndex])
+ //              // var name = (data[selectedIndex]["CZ"])
+ //              // var idClass = "id_" + value
          
-          }
-      })     
+ //          }
+ //      })     
                   
-      .selectmenu( "menuWidget" )
-      .addClass( "ui-menu-icons customicons" );
+ //      .selectmenu( "menuWidget" )
+ //      .addClass( "ui-menu-icons customicons" );
     // d3.select(".text-header.header0").call(wrapText,wrapWidth)
     // d3.select(".text-header.header1").call(wrapText,wrapWidth2)
     // d3.select(".text-header.header2").call(wrapText,wrapWidth)
