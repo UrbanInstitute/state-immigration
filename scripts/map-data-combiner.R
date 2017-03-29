@@ -1,0 +1,8 @@
+library(rgdal)
+library(tidyr)
+setwd("/Users/vhou/Documents/Projects/state-immigration/data/")
+map = readOGR("state_squares.geojson", "OGRGeoJSON")
+values_wide <- read.csv(file="policy_values_only.csv", header=TRUE, sep=",", check.names=FALSE)
+combined_data <- merge(map, values_wide, by="abbr", sort = FALSE, all.x = FALSE)
+plot(map)
+writeOGR(combined_data, dsn="test", layer="combined_data", driver="GeoJSON", overwrite_layer = F)
