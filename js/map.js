@@ -180,7 +180,8 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             console.log(selectedCategory)
             var dropdown = d3.select("#dropdown-menu-policy")
               
-          var newOptions = dropdown.selectAll("option").remove()
+          dropdown.selectAll("option").remove()
+          dropdown.selectAll("option")
               .data(descriptions.filter(function(d) {
                 console.log(d.category == selectedCategory)
                 return d.category == selectedCategory
@@ -213,6 +214,11 @@ d3.json("data/combined-data.geojson", function(error1, states) {
          change: function(event, d, selectedYear){
             var policy = this.value
                console.log(policy)
+            chartMap.map
+              .style("fill", function(d) {
+                console.log(d["properties"][policy + "_16"])
+                  return color(d["properties"][policy + "_16"]);
+              })
             d3.select(".text-body-description")
               .data(descriptions.filter(function(d) {
                 return policy == d.policy_short
@@ -222,6 +228,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
                 return d.description
               })
               .call(wrapText, wrapWidth)
+
              //  var str = "tuition_00"
              // console.log(str.substring(0, str.lastIndexOf("_") + 1))
               // var selectedIndex = this.selectedIndex
@@ -235,41 +242,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .selectmenu( "menuWidget" )
       .addClass( "ui-menu-icons customicons" );
 
-
-    // showStats("AZ");
-    // selectState("AZ")
-
-
-
-    // d3.select(".map-container")
-    //     .selectAll(".place-label")
-    //     .style("fill", function(d) {
-    //       if (d.properties.spending > 9000) {
-    //         return "#ffffff";
-    //       } else {
-    //         return "#000000"
-    //       }
-    //     })
-    // function hoverState(selectedState) {
-    //   if (d3.select("." + selectedState).classed('selected')) {
-    //   } else {
-    //     d3.selectAll(".state")
-    //       .classed('dehovered', true)
-    //       .classed('hover', false)
-    //     d3.selectAll("." + selectedState)
-    //       .classed('hover', true)
-    //       .classed("dehovered", false)
-    //   }
-    // }
-    // function selectState(selectedState) {
-    //   d3.selectAll(".state.selected")
-    //     .classed('dehovered', true)
-    //     .classed('selected', false)
-    //   d3.selectAll("." + selectedState)
-    //     .classed('selected', true)
-    //     .classed("dehovered", false)
-    //     .classed('hover', false)
-    // }
 
    
 /*SLIDER- thanks to https://bl.ocks.org/mbostock/6452972 */
@@ -321,16 +293,19 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
     function year(selectedYear) {
       handle.attr("cx", x(selectedYear));
+      var policyMenu = document.getElementById("dropdown-menu-policy");
+      var selectedPolicy = policyMenu[policyMenu.selectedIndex].value
       var slideYearRounded = Math.round(selectedYear)
       var slideYear = slideYearRounded.toString().split('20')[1]
       console.log(slideYear)
       chartMap.map
         .style("fill", function(d) {
-            return color(d["properties"]["tuition_" + slideYear]);
+            return color(d["properties"][selectedPolicy + "_" + slideYear]);
         })
       stateText.select(".text-body-year")
         .text(slideYearRounded)
     }
+
 
 
 
