@@ -47,7 +47,10 @@
 
 
 
-
+.text-body-year {
+  font-size: 16px;
+  fill: #1696d2;
+}
 
 hr {
     width: 200px;

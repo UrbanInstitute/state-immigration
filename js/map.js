@@ -187,22 +187,22 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     var stateTextX = (IS_PHONE) ? width*.09 : width*.26
     chartMap.svg2 = d3.select("#map")
           .append("svg")
-          .attr("width", width*.3)
+          .attr("width", width*.33)
           .attr("height", height*.8)
     var stateText = chartMap.svg2.append("g")
 
     stateText.append("text")
       .attr("class", "header")
-      .attr("transform", function() { return "translate("+ width*.26+", " + width*.1 + ")"; })
-      .html("Year")
+      .attr("transform", function() { return "translate("+ width*.255+", " + width*.1 + ")"; })
+      .html("YEAR")
     stateText.append("text")
       .attr("class", "header")
-      .attr("transform", function() { return "translate("+ width*.13+", " + width*.2 + ")"; })
-      .html("Policy Description")
+      .attr("transform", function() { return "translate("+ width*.09+", " + width*.2 + ")"; })
+      .html("POLICY DESCRIPTION")
   
     stateText.append("text")
       .attr("class", "text-body-year")
-      .attr("transform", function() { return "translate("+ width*.26+", " + width*.13 + ")"; })
+      .attr("transform", function() { return "translate("+ width*.253+", " + width*.13 + ")"; })
       .html("")  
 
 
@@ -347,86 +347,28 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .attr("class", "handle")
         .attr("r", 9);
 
- slider.transition() // Gratuitous intro!
-    .duration(1200)
-    .tween("year", function() {
-      var i = d3.interpolate(2000, 2016);
-      return function(t) { year(i(t)); }; 
-    });
+    slider.transition() // Gratuitous intro!
+      .duration(1200)
+      .tween("year", function() {
+        var i = d3.interpolate(2000, 2016);
+        return function(t) { year(i(t)); }; 
+      });
 
-function year(selectedYear) {
-  handle.attr("cx", x(selectedYear));
-  var slideYearRounded = Math.round(selectedYear)
-  var slideYear = slideYearRounded.toString().split('20')[1]
-  console.log(slideYear)
-  chartMap.map
-    .style("fill", function(d) {
-        return color(d["properties"]["tuition_" + slideYear]);
-    })
-  stateText.select(".text-body-year")
-    .html(slideYearRounded)
-}
-
-
+    function year(selectedYear) {
+      handle.attr("cx", x(selectedYear));
+      var slideYearRounded = Math.round(selectedYear)
+      var slideYear = slideYearRounded.toString().split('20')[1]
+      console.log(slideYear)
+      chartMap.map
+        .style("fill", function(d) {
+            return color(d["properties"]["tuition_" + slideYear]);
+        })
+      stateText.select(".text-body-year")
+        .html(slideYearRounded)
+    }
 
 
-    // dispatch.on("clickState", function (selectedState) {
-    //       var mobileClass = (IS_PHONE) ? "-mobile" : ""
-    //       var dollarFormatter = d3.format("$,")
-    //       if (d3.select(this).classed("selected")) {
-    //       d3.select(this)
-    //           .classed("selected", false)
-    //           .classed("dehovered", true)
-    //           .style("fill", function(d) {
-    //             return color(d.properties.spending);
-    //           })
-          
-    //       d3.selectAll("text.text-body-selected" + mobileClass)
-    //         .html("")
-    //       d3.selectAll(".text-body-selected" + mobileClass)
-    //         .classed("text-body-selected" + mobileClass, false)
-    //         .classed("text-body-deselected" + mobileClass, true)
-    //        //     .call(wrapText,wrapWidth)
-    //     } else {
-    //         selectState(selectedState)
-    //         d3.selectAll(".state.dehovered")
-    //           .style("fill", function(d) {
-    //             return color(d.properties.spending);
-    //           });
-    //           showStats(selectedState);
-    //             d3.selectAll(".text-body-deselected" + mobileClass)
-    //               .classed("text-body-deselected" + mobileClass, false)
-    //               .classed("text-body-selected" + mobileClass, true)
-    //          //     .call(wrapText,wrapWidth)
-    //         // d3.select(this)
-    //         //   .style("fill", "#fdbf11")
-    //         //   .classed("selected", true)
 
-    //       }
-
-    //   });
-
-    // dispatch.on("dehoverState", function() {
-    //   if (d3.selectAll(".state.selected").size() == 1) {
-    //     var state = d3.select(".state.selected").attr('class').split(" ")[1]
-    //     console.log(state)
-    //     showStats(state)
-    //      d3.selectAll(".state.hover")
-    //       .classed("hover", false)
-    //       .style("fill", function(d) {
-    //       return color(d.properties.spending);
-    //       })
-    //   } else {
-    //     d3.selectAll(".state.hover")
-    //       .classed("hover", false)
-    //       .style("fill", function(d) {
-    //       return color(d.properties.spending);
-    //       })
-    //     d3.selectAll(".text-body-deselected")
-    //       .html("")
-    //   }
-    // })
-     
 
 
   }
