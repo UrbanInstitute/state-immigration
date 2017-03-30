@@ -201,8 +201,8 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .html("Policy Description")
   
     stateText.append("text")
-      .attr("class", "text-body")
-      .attr("transform", function() { return "translate("+ width*.26+", " + width*.15 + ")"; })
+      .attr("class", "text-body-year")
+      .attr("transform", function() { return "translate("+ width*.26+", " + width*.13 + ")"; })
       .html("")  
 
 
@@ -354,15 +354,19 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       return function(t) { year(i(t)); }; 
     });
 
-function year(h) {
-  handle.attr("cx", x(h));
-  var slideYear = Math.round(h).toString().split('20')[1]
+function year(selectedYear) {
+  handle.attr("cx", x(selectedYear));
+  var slideYearRounded = Math.round(selectedYear)
+  var slideYear = slideYearRounded.toString().split('20')[1]
   console.log(slideYear)
   chartMap.map
     .style("fill", function(d) {
         return color(d["properties"]["tuition_" + slideYear]);
     })
+  stateText.select(".text-body-year")
+    .html(slideYearRounded)
 }
+
 
 
 
