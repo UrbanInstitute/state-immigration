@@ -143,12 +143,6 @@ fill:#fdbf11 !important;
    cursor: pointer;
  }
 
-.ui-selectmenu-text {
-  font-size: 17px;
-  margin-right: 1px;
-  margin-left: 1px;
-  overflow: visible !important;
-}
 
 /*SLIDER*/
 .ticks {

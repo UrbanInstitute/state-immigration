@@ -81,7 +81,6 @@ function drawGridMap(container_width){
 
  // var wrapWidth = (IS_MOBILE && !IS_PHONE) ? 220 : 100;
  var wrapWidth = width*.17;
- var wrapWidth2 = width*.1;
 
 
   /*DATA SOURCES*/
@@ -89,19 +88,6 @@ function drawGridMap(container_width){
 d3.json("data/combined-data.geojson", function(error1, states) {
   d3.csv("data/policy_descriptions_only.csv", function(error2, descriptions) {
 
-
-          // for (i=0; i<=16; i++){
-          //   if(typeof(jsonState[0]) != "undefined"){
-              
-          //   jsonState[0].properties["tuition_" + i] = csvState["tuition_" + i];
-          //   jsonState[0].properties["financial_" + i] = csvState["financial_" + i];
-          //   jsonState[0].properties["driver_" + i] = csvState["driver_" + i];
-          //   jsonState[0].properties["ban_" + i] = csvState["ban_" + i];
-          //   jsonState[0].properties["english_" + i] = csvState["english_" + i];
-
-          //   }
-
-          // }
   
 
         choropleth = new Choropleth(states, descriptions);
@@ -116,39 +102,33 @@ d3.json("data/combined-data.geojson", function(error1, states) {
    $map.empty();
 
 
-  // var showStats = function(selectedState) {
-  //   console.log(selectedState)
-  //        var stateName = d3.select("." + selectedState).datum().properties.name
-  //        var stateSpending = d3.select("." + selectedState).datum().properties.spending
-  //        var stateChildGrowth = d3.select("." + selectedState).datum().properties.growth_child_pop
-  //        var stateTotal = d3.select("." + selectedState).datum().properties.spending_total_same
-  //        var stateBudget= d3.select("." + selectedState).datum().properties.state_budget_millions
-  //        var stateBudgetEnding = function() {
-  //         if (stateBudget > 999 || stateBudget < -999) {
-  //           return  " billion"
-  //           } return " million"
-  //         }
-  //         stateBudgetEnding = stateBudgetEnding();
-  //        var divide = (stateBudget >999 || stateBudget < -999) ? 1000: 1
+    function wrapText(text, width) {
+      text.each(function() {
+        var text = d3.select(this),
+            words = text.text().split(/\s+/).reverse(),
+            word,
+            line = [],
+            lineNumber = 0,
+            lineHeight = 1.1, // ems
+            y = text.attr("y"),
+            x = text.attr("x"),
+            dy = -1,
+            tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
+        while (word = words.pop()) {
+          line.push(word);
+          tspan.text(line.join(" "));
+          if (tspan.node().getComputedTextLength() > width) {
+            line.pop();
+            tspan.text(line.join(" "));
+            line = [word];
+            tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
+          }
+        }
+      });
+    }
 
-  //        var dollarFormatter = d3.format("$,")
-  //         d3.select("." + selectedState)
-  //           .style("fill", "#fdbf11")
-  //         d3.select(".text0")
-  //            .html(stateName)
-  //         d3.select(".text1")
-  //            .html(dollarFormatter(stateSpending))
-  //         d3.select(".text2")
-  //            .html(stateChildGrowth)
-  //         d3.select(".text3")
-  //            .html(dollarFormatter(stateBudget/divide) + stateBudgetEnding)
-  //         d3.select(".text4")
-  //            .html(dollarFormatter(stateTotal))
-  //         d3.selectAll("text.text-body-deselected")
-  //           .call(wrapText, wrapWidth)
-  //         d3.selectAll("text.text-body-selected")
-  //           .call(wrapText, wrapWidth)
-  // }
+    // var wrapWidth = (IS_MOBILE && !IS_PHONE) ? 220 : 100;
+    var wrapWidth = width*.5;
 
     chartMap.svg = d3.select("#map")
       .append("svg")
@@ -204,7 +184,11 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .attr("class", "text-body-year")
       .attr("transform", function() { return "translate("+ width*.253+", " + width*.13 + ")"; })
       .html("")  
-
+  
+    stateText.append("text")
+      .attr("class", "text-body-description")
+      .attr("transform", function() { return "translate("+ width*.05+", " + width*.23 + ")"; })
+      .html("")  
 
 
 
@@ -220,9 +204,10 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           },
          change: function(event, d){
             var selectedCategory = this.value;
+            console.log(selectedCategory)
             var dropdown = d3.select("#dropdown-menu-policy")
               
-            var newOptions = dropdown.selectAll("option").remove()
+          var newOptions = dropdown.selectAll("option").remove()
               .data(descriptions.filter(function(d) {
                 console.log(d.category == selectedCategory)
                 return d.category == selectedCategory
@@ -232,9 +217,9 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               }))
               .enter()
               .append("option")
-              .attr("value", function(d){return d.policy_short;})
+              .attr("value", function(d){console.log(d.policy_short); return d.policy_short;})
               .text(function(d){console.log(d.policy_long); return d.policy_long;})
-         
+         $("#dropdown-menu-policy").selectmenu( "refresh" );
           }
       })     
                   
@@ -252,8 +237,20 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             d3.select("body").style("height", null)
             pymChild.sendHeight();
           },
-         change: function(event, d){
-              // var value = this.value
+         change: function(event, d, selectedYear){
+            var policy = this.value
+               console.log(policy)
+            d3.select(".text-body-description")
+              .data(descriptions.filter(function(d) {
+                return policy == d.policy_short
+              }))
+              .text(function(d) {
+                console.log(d.description);
+                return d.description
+              })
+              .call(wrapText, wrapWidth)
+             //  var str = "tuition_00"
+             // console.log(str.substring(0, str.lastIndexOf("_") + 1))
               // var selectedIndex = this.selectedIndex
               // var selectedData = (data[selectedIndex])
               // var name = (data[selectedIndex]["CZ"])
@@ -264,12 +261,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
                   
       .selectmenu( "menuWidget" )
       .addClass( "ui-menu-icons customicons" );
-    // d3.select(".text-header.header0").call(wrapText,wrapWidth)
-    // d3.select(".text-header.header1").call(wrapText,wrapWidth2)
-    // d3.select(".text-header.header2").call(wrapText,wrapWidth)
-    // d3.select(".text-header.header4").call(wrapText,wrapWidth2)
-    // d3.select(".text-header.header3").call(wrapText,wrapWidth)
-    // d3.selectAll(".text-subheader").call(wrapText,wrapWidth)
+
 
     // showStats("AZ");
     // selectState("AZ")
