@@ -54,34 +54,6 @@ function drawGridMap(container_width){
 
 
 
-  function wrapText(text, width) {
-    text.each(function() {
-      var text = d3.select(this),
-          words = text.text().split(/\s+/).reverse(),
-          word,
-          line = [],
-          lineNumber = 0,
-          lineHeight = 1.1, // ems
-          y = text.attr("y"),
-          x = text.attr("x"),
-          dy = -1,
-          tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-      while (word = words.pop()) {
-        line.push(word);
-        tspan.text(line.join(" "));
-        if (tspan.node().getComputedTextLength() > width) {
-          line.pop();
-          tspan.text(line.join(" "));
-          line = [word];
-          tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-        }
-      }
-    });
-  }
-
- // var wrapWidth = (IS_MOBILE && !IS_PHONE) ? 220 : 100;
- var wrapWidth = width*.17;
-
 
   /*DATA SOURCES*/
 
@@ -109,15 +81,16 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             word,
             line = [],
             lineNumber = 0,
-            lineHeight = 1.1, // ems
-            y = text.attr("y"),
-            x = text.attr("x"),
+            lineHeight = 1.5, // ems
+            y = width*.05,
+            x = 0,
             dy = -1,
             tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
         while (word = words.pop()) {
           line.push(word);
           tspan.text(line.join(" "));
           if (tspan.node().getComputedTextLength() > width) {
+            console.log(x)
             line.pop();
             tspan.text(line.join(" "));
             line = [word];
@@ -128,7 +101,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     }
 
     // var wrapWidth = (IS_MOBILE && !IS_PHONE) ? 220 : 100;
-    var wrapWidth = width*.5;
+    var wrapWidth = width*.23;
 
     chartMap.svg = d3.select("#map")
       .append("svg")
@@ -174,21 +147,21 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     stateText.append("text")
       .attr("class", "header")
       .attr("transform", function() { return "translate("+ width*.255+", " + width*.1 + ")"; })
-      .html("YEAR")
+      .text("YEAR")
     stateText.append("text")
       .attr("class", "header")
-      .attr("transform", function() { return "translate("+ width*.09+", " + width*.2 + ")"; })
-      .html("POLICY DESCRIPTION")
+      .attr("transform", function() { return "translate("+ width*.09+", " + width*.19 + ")"; })
+      .text("POLICY DESCRIPTION")
   
     stateText.append("text")
       .attr("class", "text-body-year")
       .attr("transform", function() { return "translate("+ width*.253+", " + width*.13 + ")"; })
-      .html("")  
+      .text("")  
   
     stateText.append("text")
       .attr("class", "text-body-description")
-      .attr("transform", function() { return "translate("+ width*.05+", " + width*.23 + ")"; })
-      .html("")  
+      .attr("transform", function() { return "translate("+ width*.09+", " + width*.23 + ")"; })
+      .text("")  
 
 
 
@@ -356,7 +329,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             return color(d["properties"]["tuition_" + slideYear]);
         })
       stateText.select(".text-body-year")
-        .html(slideYearRounded)
+        .text(slideYearRounded)
     }
 
 
