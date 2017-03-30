@@ -224,10 +224,9 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           },
          change: function(event, d){
             var selectedCategory = this.value;
-          $("#dropdown-menu-policy").empty()
             var dropdown = d3.select("#dropdown-menu-policy")
               
-            var newOptions = dropdown.selectAll("option")
+            var newOptions = dropdown.selectAll("option").remove()
               .data(descriptions.filter(function(d) {
                 console.log(d.category == selectedCategory)
                 return d.category == selectedCategory
@@ -235,17 +234,10 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             // if (a.CZ.toLowerCase() > b.CZ.toLowerCase()) return 1;
             // return 0;
               }))
-            newOptions
               .enter()
               .append("option")
               .attr("value", function(d){return d.policy_short;})
-               .text(function(d){console.log(d.policy_long); return d.policy_long;})
-
-              // var value = this.value
-              // var selectedIndex = this.selectedIndex
-              // var selectedData = (data[selectedIndex])
-              // var name = (data[selectedIndex]["CZ"])
-              // var idClass = "id_" + value
+              .text(function(d){console.log(d.policy_long); return d.policy_long;})
          
           }
       })     
