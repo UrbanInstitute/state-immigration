@@ -311,8 +311,59 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     // }
 
    
+/*SLIDER- thanks to https://bl.ocks.org/mbostock/6452972 */
+    var x = d3.scaleLinear()
+        .domain([2000, 2016])
+        .range([0, width*.55])
+        .clamp(true);
+    
+    var sliderSvg = d3.select("#slider")
+      .append("svg")
+      .attr("width", width*.65)
+      .attr("height", height*.3);
+    var slider = sliderSvg.append("g")
+        .attr("class", "slider")
+        .attr("transform", "translate(" + width*.02 + "," + 10 + ")");
 
+    slider.append("line")
+        .attr("class", "track")
+        .attr("x1", x.range()[0])
+        .attr("x2", x.range()[1])
+      .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .attr("class", "track-inset")
+      .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
+        .attr("class", "track-overlay")
+        .call(d3.drag()
+            .on("start.interrupt", function() { slider.interrupt(); })
+            .on("start drag", function() { /*hue(x.invert(d3.event.x));*/ }));
 
+    slider.insert("g", ".track-overlay")
+        .attr("class", "ticks")
+        .attr("transform", "translate(0," + 18 + ")")
+      .selectAll("text")
+      .data(x.ticks(8))
+      .enter().append("text")
+        .attr("x", x)
+        .attr("text-anchor", "middle")
+        .text(function(d) { return d; });
+
+    var handle = slider.insert("circle", ".track-overlay")
+        .attr("class", "handle")
+        .attr("r", 9);
+
+    slider.transition() // Gratuitous intro!
+        .duration(750)
+        .tween("year", function() {
+          var i = d3.interpolate(0, 16);
+          console.log(function(t) { year(i(t)) }) ;
+          return function(t) { year(i(t)); };
+        });
+
+    function year(h) {
+      handle.attr("cx", x(h));
+      console.log(x(h))
+      //svg.style("background-color", d3.hsl(h, 0.8, 0.8));
+    }
 
 
     // dispatch.on("clickState", function (selectedState) {
