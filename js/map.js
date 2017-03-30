@@ -181,10 +181,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
  // //  chartMap.states = states;
 
 
-    chartMap.map
-      .style("fill", function(d) {
-          return color(d.properties.tuition_16);
-      })
 
 
  //    //STATE TEXT INFO
@@ -335,7 +331,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .attr("class", "track-overlay")
         .call(d3.drag()
             .on("start.interrupt", function() { slider.interrupt(); })
-            .on("start drag", function() { /*hue(x.invert(d3.event.x));*/ }));
+            .on("start drag", function() { year(x.invert(d3.event.x)); }));
 
     slider.insert("g", ".track-overlay")
         .attr("class", "ticks")
@@ -351,19 +347,23 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .attr("class", "handle")
         .attr("r", 9);
 
-    slider.transition() // Gratuitous intro!
-        .duration(750)
-        .tween("year", function() {
-          var i = d3.interpolate(0, 16);
-          console.log(function(t) { year(i(t)) }) ;
-          return function(t) { year(i(t)); };
-        });
+ slider.transition() // Gratuitous intro!
+    .duration(1200)
+    .tween("year", function() {
+      var i = d3.interpolate(2000, 2016);
+      return function(t) { year(i(t)); }; 
+    });
 
-    function year(h) {
-      handle.attr("cx", x(h));
-      console.log(x(h))
-      //svg.style("background-color", d3.hsl(h, 0.8, 0.8));
-    }
+function year(h) {
+  handle.attr("cx", x(h));
+  var slideYear = Math.round(h).toString().split('20')[1]
+  console.log(slideYear)
+  chartMap.map
+    .style("fill", function(d) {
+        return color(d["properties"]["tuition_" + slideYear]);
+    })
+}
+
 
 
     // dispatch.on("clickState", function (selectedState) {
