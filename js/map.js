@@ -90,7 +90,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           line.push(word);
           tspan.text(line.join(" "));
           if (tspan.node().getComputedTextLength() > width) {
-            console.log(x)
             line.pop();
             tspan.text(line.join(" "));
             line = [word];
@@ -176,10 +175,10 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             pymChild.sendHeight();
           },
          change: function(event, d){
+            console.log(selectedPolicy)           
             var selectedCategory = this.value;
-            console.log(selectedCategory)
             var dropdown = d3.select("#dropdown-menu-policy")
-              
+          
           dropdown.selectAll("option").remove()
           dropdown.selectAll("option")
               .data(descriptions.filter(function(d) {
@@ -193,7 +192,22 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               .append("option")
               .attr("value", function(d){console.log(d.policy_short); return d.policy_short;})
               .text(function(d){console.log(d.policy_long); return d.policy_long;})
+
          $("#dropdown-menu-policy").selectmenu( "refresh" );
+          var policyMenu = document.getElementById("dropdown-menu-policy");
+          var selectedPolicy = policyMenu[policyMenu.selectedIndex].value 
+          d3.select(".text-body-description")
+            .data(descriptions.filter(function(d) {
+              return selectedPolicy == d.policy_short
+            }))
+            .text(function(d) {
+              if (chartMap.map.classed("no_data") && slideYear == '16') {
+                console.log('no data');
+                return "No data"
+              } console.log('description')
+              return d.description
+            })
+            .call(wrapText, wrapWidth)
           }
       })     
                   
@@ -216,15 +230,28 @@ d3.json("data/combined-data.geojson", function(error1, states) {
                console.log(policy)
             chartMap.map
               .style("fill", function(d) {
-                console.log(d["properties"][policy + "_16"])
-                  return color(d["properties"][policy + "_16"]);
+
+                  return color(d["properties"][policy + "_" + "16"]);
               })
+              .classed("no_data", function(d) {
+                if ((d["properties"][policy + "_" + "16"] == null) && slideYear == '16') {
+                  return true
+                } return false
+              })
+              // .style("stroke", function(d) {
+              //   if (d["properties"][policy + "_" + "16"] == null) {
+              //   return "#d2d2d2"
+              //   } return "";
+              // })
             d3.select(".text-body-description")
               .data(descriptions.filter(function(d) {
                 return policy == d.policy_short
               }))
               .text(function(d) {
-                console.log(d.description);
+                if (chartMap.map.classed("no_data")) {
+                  console.log('no data');
+                  return "No data"
+                } console.log('description')
                 return d.description
               })
               .call(wrapText, wrapWidth)
@@ -300,10 +327,27 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       console.log(slideYear)
       chartMap.map
         .style("fill", function(d) {
+
             return color(d["properties"][selectedPolicy + "_" + slideYear]);
+        })
+        .classed("no_data", function(d) {
+          if ((d["properties"][selectedPolicy + "_" + "16"] == null) && slideYear == '16') {
+            return true
+          } return false
         })
       stateText.select(".text-body-year")
         .text(slideYearRounded)
+      d3.select(".text-body-description")
+        .data(descriptions.filter(function(d) {
+          return selectedPolicy == d.policy_short
+        }))
+        .text(function(d) {
+          if (chartMap.map.classed("no_data") && slideYear == '16') {
+            return "No data"
+          }
+          return d.description
+        })
+        .call(wrapText, wrapWidth)
     }
 
 

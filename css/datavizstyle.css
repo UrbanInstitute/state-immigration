@@ -21,6 +21,11 @@
 
 }
 
+.no_data {
+  fill: #ffffff !important;
+  stroke: #d2d2d2 !important;
+}
+
 
 .ui-selectmenu-button.ui-button {
   height: 35px !important;
