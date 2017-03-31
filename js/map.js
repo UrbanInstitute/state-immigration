@@ -201,7 +201,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               return selectedPolicy == d.policy_short
             }))
             .text(function(d) {
-              if (chartMap.map.classed("no_data") && slideYear == '16') {
+              if (chartMap.map.classed("no_data") && slideYear() == '16') {
                 console.log('no data');
                 return "No data"
               } console.log('description')
@@ -231,10 +231,10 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             chartMap.map
               .style("fill", function(d) {
 
-                  return color(d["properties"][policy + "_" + "16"]);
+                  return color(d["properties"][policy + "_" + slideYear()]);
               })
               .classed("no_data", function(d) {
-                if ((d["properties"][policy + "_" + "16"] == null) && slideYear == '16') {
+                if ((d["properties"][policy + "_" + "16"] == null) && slideYear() == '16') {
                   return true
                 } return false
               })
@@ -272,9 +272,10 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
    
 /*SLIDER- thanks to https://bl.ocks.org/mbostock/6452972 */
+    var sliderWidth = width*.55
     var x = d3.scaleLinear()
         .domain([2000, 2016])
-        .range([0, width*.55])
+        .range([0, sliderWidth])
         .clamp(true);
     
     var sliderSvg = d3.select("#slider")
@@ -295,7 +296,9 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .attr("class", "track-overlay")
         .call(d3.drag()
             .on("start.interrupt", function() { slider.interrupt(); })
-            .on("start drag", function() { year(x.invert(d3.event.x)); }));
+            .on("start drag", function() { 
+              year(x.invert(d3.event.x)); 
+            }));
 
     slider.insert("g", ".track-overlay")
         .attr("class", "ticks")
@@ -322,27 +325,27 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       handle.attr("cx", x(selectedYear));
       var policyMenu = document.getElementById("dropdown-menu-policy");
       var selectedPolicy = policyMenu[policyMenu.selectedIndex].value
-      var slideYearRounded = Math.round(selectedYear)
-      var slideYear = slideYearRounded.toString().split('20')[1]
-      console.log(slideYear)
+      // var slideYearRounded = Math.round(selectedYear)
+      // selectedyear()
+      // var slideYear = slideYearRounded.toString().split('20')[1]
       chartMap.map
         .style("fill", function(d) {
 
-            return color(d["properties"][selectedPolicy + "_" + slideYear]);
+            return color(d["properties"][selectedPolicy + "_" + slideYear()]);
         })
         .classed("no_data", function(d) {
-          if ((d["properties"][selectedPolicy + "_" + "16"] == null) && slideYear == '16') {
+          if ((d["properties"][selectedPolicy + "_" + slideYear()] == null) && slideYear() == '16') {
             return true
           } return false
         })
       stateText.select(".text-body-year")
-        .text(slideYearRounded)
+        .text(slideYear())
       d3.select(".text-body-description")
         .data(descriptions.filter(function(d) {
           return selectedPolicy == d.policy_short
         }))
         .text(function(d) {
-          if (chartMap.map.classed("no_data") && slideYear == '16') {
+          if (chartMap.map.classed("no_data") && slideYear() == '16') {
             return "No data"
           }
           return d.description
@@ -350,8 +353,15 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .call(wrapText, wrapWidth)
     }
 
+  
 
 
+    var slideYear = function(selected) {
+      var xHandle = (handle.attr("cx")/(sliderWidth))*16 + 2000
+      var xHandleRounded = Math.round(xHandle)
+      var xHandleYear = xHandleRounded.toString().split('20')[1]
+      return xHandleYear
+    }
 
 
 
