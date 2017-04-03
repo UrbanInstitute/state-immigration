@@ -178,36 +178,23 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             console.log(selectedPolicy)           
             var selectedCategory = this.value;
             var dropdown = d3.select("#dropdown-menu-policy")
-          
-          dropdown.selectAll("option").remove()
-          dropdown.selectAll("option")
-              .data(descriptions.filter(function(d) {
-                console.log(d.category == selectedCategory)
-                return d.category == selectedCategory
+            dropdown.selectAll("option").remove()
+            dropdown.selectAll("option")
+                .data(descriptions.filter(function(d) {
+                  console.log(d.category == selectedCategory)
+                  return d.category == selectedCategory
             //       if (a.CZ.toLowerCase() < b.CZ.toLowerCase()) return -1;
             // if (a.CZ.toLowerCase() > b.CZ.toLowerCase()) return 1;
             // return 0;
               }))
               .enter()
               .append("option")
-              .attr("value", function(d){console.log(d.policy_short); return d.policy_short;})
-              .text(function(d){console.log(d.policy_long); return d.policy_long;})
-
-         $("#dropdown-menu-policy").selectmenu( "refresh" );
-          var policyMenu = document.getElementById("dropdown-menu-policy");
-          var selectedPolicy = policyMenu[policyMenu.selectedIndex].value 
-          d3.select(".text-body-description")
-            .data(descriptions.filter(function(d) {
-              return selectedPolicy == d.policy_short
-            }))
-            .text(function(d) {
-              if (chartMap.map.classed("no_data") && slideYear() == '16') {
-                console.log('no data');
-                return "No data"
-              } console.log('description')
-              return d.description
-            })
-            .call(wrapText, wrapWidth)
+              .attr("value", function(d){ return d.policy_short;})
+              .text(function(d){return d.policy_long;})
+            $("#dropdown-menu-policy").selectmenu( "refresh" );
+            var policyMenu = document.getElementById("dropdown-menu-policy");
+            var selectedPolicy = policyMenu[policyMenu.selectedIndex].value 
+            changeProperties(selectedPolicy);
           }
       })     
                   
@@ -225,36 +212,9 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             d3.select("body").style("height", null)
             pymChild.sendHeight();
           },
-         change: function(event, d, selectedYear){
-            var policy = this.value
-               console.log(policy)
-            chartMap.map
-              .style("fill", function(d) {
-
-                  return color(d["properties"][policy + "_" + slideYear()]);
-              })
-              .classed("no_data", function(d) {
-                if ((d["properties"][policy + "_" + "16"] == null) && slideYear() == '16') {
-                  return true
-                } return false
-              })
-              // .style("stroke", function(d) {
-              //   if (d["properties"][policy + "_" + "16"] == null) {
-              //   return "#d2d2d2"
-              //   } return "";
-              // })
-            d3.select(".text-body-description")
-              .data(descriptions.filter(function(d) {
-                return policy == d.policy_short
-              }))
-              .text(function(d) {
-                if (chartMap.map.classed("no_data")) {
-                  console.log('no data');
-                  return "No data"
-                } console.log('description')
-                return d.description
-              })
-              .call(wrapText, wrapWidth)
+         change: function(event, d){
+            var selectedPolicy = this.value
+            changeProperties(selectedPolicy)
 
              //  var str = "tuition_00"
              // console.log(str.substring(0, str.lastIndexOf("_") + 1))
@@ -269,7 +229,30 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .selectmenu( "menuWidget" )
       .addClass( "ui-menu-icons customicons" );
 
+  var changeProperties = function(selectedPolicy) {
+          chartMap.map
+            .style("fill", function(d) {
+                return color(d["properties"][selectedPolicy + "_" + slideYear()]);
+            })
+            .classed("no_data", function(d) {
+              if ((d["properties"][selectedPolicy + "_" + "16"] == null) && slideYear() == '16') {
+                console.log(selectedPolicy);return true
+              } console.log('false'); return false
+            })
+          d3.select(".text-body-description")
+            .data(descriptions.filter(function(d) {
+              return selectedPolicy == d.policy_short
+            }))
+            .text(function(d) {
+              if (chartMap.map.classed("no_data") && slideYear() == '16') {
+                console.log('no data');
+                return "No data"
+              } console.log('description')
+              return d.description
+            })
+            .call(wrapText, wrapWidth)
 
+  }
    
 /*SLIDER- thanks to https://bl.ocks.org/mbostock/6452972 */
     var sliderWidth = width*.55
@@ -314,14 +297,18 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .attr("class", "handle")
         .attr("r", 9);
 
-    slider.transition() // Gratuitous intro!
-      .duration(1200)
-      .tween("year", function() {
-        var i = d3.interpolate(2000, 2016);
-        return function(t) { year(i(t)); }; 
-      });
+    var slideAll = function() {
+      slider.transition() 
+        .duration(1400)
+        .tween("year", function() {
+          var i = d3.interpolate(2000, 2016);
+          return function(t) { year(i(t)); }; 
+        });
+    }
+    slideAll();
 
     function year(selectedYear) {
+     
       handle.attr("cx", x(selectedYear));
       var policyMenu = document.getElementById("dropdown-menu-policy");
       var selectedPolicy = policyMenu[policyMenu.selectedIndex].value
@@ -339,7 +326,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           } return false
         })
       stateText.select(".text-body-year")
-        .text(slideYear())
+        .text("20" + slideYear())
       d3.select(".text-body-description")
         .data(descriptions.filter(function(d) {
           return selectedPolicy == d.policy_short
