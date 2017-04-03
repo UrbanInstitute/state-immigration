@@ -86,6 +86,11 @@
   fill: #1696d2;
 }
 
+.ui-selectmenu-menu .ui-menu  {
+  width: 16em !important;
+}
+
+
 hr {
     width: 200px;
     border: 0 !important;

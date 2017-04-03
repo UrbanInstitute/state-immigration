@@ -46,7 +46,7 @@ function drawGridMap(container_width){
   var projection = d3.geoEquirectangular()
     .scale((IS_PHONE) ? width*3.2 : width*2.7)
     .center([-96.03542,41.69553])
-    .translate(IS_PHONE ? [width /2.3, height /2.7] : [width /3.3, height /3]);
+    .translate(IS_PHONE ? [width /2.3, height /2.7] : [width /3.3, height /2.2]);
 
   var path = d3.geoPath()
     .projection(projection);
@@ -129,10 +129,45 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .text(function(d) { 
         return d.properties.abbr;
       });
-        
- // //  chartMap.states = states;
 
+    var addLegend = function() {
+      var legendColor = d3.scaleOrdinal()
+        .range([ "#d2d2d2", "#1696d2", "#fdbf11"]);
+      var legendText = ["None of highest-immigrant counties had policy", "Some of highest-immigrant counties had policy", "All of highest immigrant counties had policy"]
 
+  
+      var legend = chartMap.svg.append('g')
+          .attr("width", width*.2)
+          .attr("height", width*.2)
+          .attr("transform", function(d) { return "translate("+ width*.12+ "," + width*.6 + ")"; })
+          .selectAll("g")
+          .data(legendColor.range())
+          .enter()
+          .append("g")
+          .attr("transform", function(d,i) {
+            return "translate(0,"+ (width*.03*i) + ")"; 
+          })
+          .attr("class", "legend")
+
+        legend.append("rect")
+          // .attr("x", function (i) {for (i=1; i <= legendColor.range().length; i++) 
+          // {console.log(i*12); return (width*.03*i) + "px"; }
+          // })
+          // .attr("y",  width*.53 + "px")
+          .attr("width", 8 + "px")
+          .attr("height", 8 + "px")
+          .style("fill", legendColor);
+
+      legend.append("text")
+          .data(legendText)
+          .attr("x", width*.025)
+          .attr("y", width*.012)
+          .text(function(d) { console.log(d)
+            return d
+          });
+    }
+
+    addLegend();
 
 
  //    //STATE TEXT INFO
@@ -215,7 +250,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
          change: function(event, d){
             var selectedPolicy = this.value
             changeProperties(selectedPolicy)
-
              //  var str = "tuition_00"
              // console.log(str.substring(0, str.lastIndexOf("_") + 1))
               // var selectedIndex = this.selectedIndex
