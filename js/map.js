@@ -46,7 +46,7 @@ function drawGridMap(container_width){
   var projection = d3.geoEquirectangular()
     .scale((IS_PHONE) ? width*3.2 : width*2.7)
     .center([-96.03542,41.69553])
-    .translate(IS_PHONE ? [width /2.3, height /2.7] : [width /3.3, height /2.2]);
+    .translate(IS_PHONE ? [width /2.3, height /2.7] : [width /3.3, height /2.4]);
 
   var path = d3.geoPath()
     .projection(projection);
@@ -139,7 +139,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       var legend = chartMap.svg.append('g')
           .attr("width", width*.2)
           .attr("height", width*.2)
-          .attr("transform", function(d) { return "translate("+ width*.12+ "," + width*.6 + ")"; })
+          .attr("transform", function(d) { return "translate("+ width*.12+ "," + width*.56 + ")"; })
           .selectAll("g")
           .data(legendColor.range())
           .enter()
@@ -195,7 +195,11 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     stateText.append("text")
       .attr("class", "text-body-description")
       .attr("transform", function() { return "translate("+ textStart+", " + width*.15 + ")"; })
-      .text("")  
+      .text("") 
+    chartMap.svg.append("text") 
+      .attr("class", "text-policy-title")
+      .attr("transform", function() { return "translate("+ width*.01+", " + width*.04 + ")"; })
+      .text("") 
 
 
 
@@ -285,6 +289,13 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               return d.description
             })
             .call(wrapText, wrapWidth)
+          d3.select(".text-policy-title")
+            .data(descriptions.filter(function(d) {
+              return selectedPolicy == d.policy_short
+            }))
+            .text(function(d) {
+              return d.policy_long
+            })
 
   }
    
@@ -388,6 +399,13 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           return d.description
         })
         .call(wrapText, wrapWidth)
+      d3.select(".text-policy-title")
+        .data(descriptions.filter(function(d) {
+          return selectedPolicy == d.policy_short
+        }))
+        .text(function(d) {
+          return d.policy_long
+        })
     }
 
   
