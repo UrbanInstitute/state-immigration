@@ -133,7 +133,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     var addLegend = function() {
       var legendColor = d3.scaleOrdinal()
         .range([ "#d2d2d2", "#1696d2", "#fdbf11"]);
-      var legendText = ["None of highest-immigrant counties had policy", "Some of highest-immigrant counties had policy", "All of highest immigrant counties had policy"]
+      var legendText = ["None of highest-immigrant counties had the policy", "Some of highest-immigrant counties had the policy", "All of highest immigrant counties had the policy"]
 
   
       var legend = chartMap.svg.append('g')
