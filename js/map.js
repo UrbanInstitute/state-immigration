@@ -46,7 +46,7 @@ function drawGridMap(container_width){
   var projection = d3.geoEquirectangular()
     .scale((IS_PHONE) ? width*3.2 : width*2.7)
     .center([-96.03542,41.69553])
-    .translate(IS_PHONE ? [width /2.3, height /2.7] : [width /3.3, height /2.3]);
+    .translate(IS_PHONE ? [width /2.3, height /2.7] : [width /3.3, height /3]);
 
   var path = d3.geoPath()
     .projection(projection);
@@ -100,12 +100,12 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     }
 
     // var wrapWidth = (IS_MOBILE && !IS_PHONE) ? 220 : 100;
-    var wrapWidth = width*.23;
+    var wrapWidth = width*.31;
 
     chartMap.svg = d3.select("#map")
       .append("svg")
       .attr("width", width*.65)
-      .attr("height", height*.8);
+      .attr("height", height*1.1);
 
     chartMap.map = chartMap.svg.append('g')
       .selectAll('path')
@@ -140,26 +140,26 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     chartMap.svg2 = d3.select("#map")
           .append("svg")
           .attr("width", width*.33)
-          .attr("height", height*.8)
+          .attr("height", height*1.1)
     var stateText = chartMap.svg2.append("g")
-
+    var textStart = width*.015
     stateText.append("text")
       .attr("class", "header")
-      .attr("transform", function() { return "translate("+ width*.255+", " + width*.1 + ")"; })
+      .attr("transform", function() { return "translate("+ textStart+", " + width*.03 + ")"; })
       .text("YEAR")
     stateText.append("text")
       .attr("class", "header")
-      .attr("transform", function() { return "translate("+ width*.09+", " + width*.19 + ")"; })
+      .attr("transform", function() { return "translate("+ textStart+", " + width*.12 + ")"; })
       .text("POLICY DESCRIPTION")
   
     stateText.append("text")
       .attr("class", "text-body-year")
-      .attr("transform", function() { return "translate("+ width*.253+", " + width*.13 + ")"; })
+      .attr("transform", function() { return "translate("+ textStart+", " + width*.06 + ")"; })
       .text("")  
   
     stateText.append("text")
       .attr("class", "text-body-description")
-      .attr("transform", function() { return "translate("+ width*.09+", " + width*.23 + ")"; })
+      .attr("transform", function() { return "translate("+ textStart+", " + width*.15 + ")"; })
       .text("")  
 
 
@@ -261,10 +261,12 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .range([0, sliderWidth])
         .clamp(true);
     
-    var sliderSvg = d3.select("#slider")
+    $("#slider-div").empty()
+
+    var sliderSvg = d3.select("#slider-div")
       .append("svg")
       .attr("width", width*.65)
-      .attr("height", height*.3);
+      .attr("height", height*.15);
     var slider = sliderSvg.append("g")
         .attr("class", "slider")
         .attr("transform", "translate(" + width*.02 + "," + 10 + ")");
@@ -297,15 +299,29 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .attr("class", "handle")
         .attr("r", 9);
 
-    var slideAll = function() {
-      slider.transition() 
-        .duration(1400)
+    var slideAll = function(duration) {
+      slider.transition()
+        .duration(duration)
         .tween("year", function() {
           var i = d3.interpolate(2000, 2016);
           return function(t) { year(i(t)); }; 
         });
     }
-    slideAll();
+    slideAll(1400);
+
+    d3.select(".play_button")
+      .on("mouseover", function() {
+        d3.select(".play_button")
+          .classed("active", true)
+      })
+      .on("mouseout", function() {
+        d3.select(".play_button")
+          .classed("active", false)
+      })
+      .on("click", function() {
+        console.log('play')
+        slideAll(10000)
+      })
 
     function year(selectedYear) {
      
