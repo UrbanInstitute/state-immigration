@@ -213,7 +213,7 @@ svg.legend-text-div {
   font-weight: 700;
 }
 .header.policies {
-  
+
   
 }
 .text-subheader, .text-subheader-mobile {
@@ -330,8 +330,7 @@ fill:#fdbf11 !important;
   }
 
   .category_button {
-    margin-bottom: 0px;
-    margin-top: 35px;
+    margin-bottom: 8px;
   }
 
   .place-label {
