@@ -38,7 +38,7 @@ function drawGridMap(container_width){
 
   var $map = $("#map");
   var aspect_width = 25;
-  var aspect_height = (IS_PHONE) ? 30: 18;
+  var aspect_height = 18;
   var margin = { top: 10, right: 5, bottom: 10, left: 5 };
   var width= container_width - margin.left - margin.right; 
   var height = Math.ceil((width * aspect_height) / aspect_width) - margin.top - margin.bottom; 
@@ -46,7 +46,7 @@ function drawGridMap(container_width){
   var projection = d3.geoEquirectangular()
     .scale((IS_PHONE) ? width*3.2 : width*2.7)
     .center([-96.03542,41.69553])
-    .translate(IS_PHONE ? [width /2.3, height /2.7] : [width /3.3, height /2.4]);
+    .translate(IS_PHONE ? [width /2.3, height /2.1] : [width /3.3, height /2.4]);
 
   var path = d3.geoPath()
     .projection(projection);
@@ -100,11 +100,12 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     }
 
     // var wrapWidth = (IS_MOBILE && !IS_PHONE) ? 220 : 100;
-    var wrapWidth = width*.31;
+    var wrapWidth = (IS_PHONE) ? width*.78 : width*.31;
+    var mapWidth = (IS_PHONE) ? width*.9 : width*.65
 
     chartMap.svg = d3.select("#map")
       .append("svg")
-      .attr("width", width*.65)
+      .attr("width", mapWidth)
       .attr("height", height*1.1);
 
     chartMap.map = chartMap.svg.append('g')
@@ -116,7 +117,8 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .attr('class', function(d) {
         return 'state ' + d.properties.abbr + ' dehovered '
       })
-
+    chartMap.map
+      .style("fill", "#fff")
     chartMap.svg
       .selectAll(".place-label")
       .data(states.features)
@@ -135,11 +137,11 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .range([ "#d2d2d2", "#1696d2", "#fdbf11"]);
       var legendText = ["None of highest-immigrant counties had the policy", "Some of highest-immigrant counties had the policy", "All of highest immigrant counties had the policy"]
 
-  
+      var legendY = (IS_PHONE) ? width*.65 : width*.56
       var legend = chartMap.svg.append('g')
           .attr("width", width*.2)
           .attr("height", width*.2)
-          .attr("transform", function(d) { return "translate("+ width*.12+ "," + width*.56 + ")"; })
+          .attr("transform", function(d) { return "translate("+ width*.12+ "," + legendY + ")"; })
           .selectAll("g")
           .data(legendColor.range())
           .enter()
@@ -150,10 +152,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           .attr("class", "legend")
 
         legend.append("rect")
-          // .attr("x", function (i) {for (i=1; i <= legendColor.range().length; i++) 
-          // {console.log(i*12); return (width*.03*i) + "px"; }
-          // })
-          // .attr("y",  width*.53 + "px")
           .attr("width", 8 + "px")
           .attr("height", 8 + "px")
           .style("fill", legendColor);
@@ -162,7 +160,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           .data(legendText)
           .attr("x", width*.025)
           .attr("y", width*.012)
-          .text(function(d) { console.log(d)
+          .text(function(d) { 
             return d
           });
     }
@@ -172,11 +170,15 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
  //    //STATE TEXT INFO
     var stateTextX = (IS_PHONE) ? width*.09 : width*.26
+    var svg2Width = (IS_PHONE) ? width*.9 : width*.33;
     chartMap.svg2 = d3.select("#map")
           .append("svg")
-          .attr("width", width*.33)
+          .attr("width", svg2Width)
           .attr("height", height*1.1)
+
     var stateText = chartMap.svg2.append("g")
+        //  .attr("transform", function() {return "translate("+ svg2X+", " + 0 + ")"; })  
+
     var textStart = width*.015
     stateText.append("text")
       .attr("class", "header")
@@ -300,7 +302,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
   }
    
 /*SLIDER- thanks to https://bl.ocks.org/mbostock/6452972 */
-    var sliderWidth = width*.8
+    var sliderWidth = width*.85
     var x = d3.scaleLinear()
         .domain([2000, 2016])
         .range([0, sliderWidth])
@@ -310,11 +312,11 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
     var sliderSvg = d3.select("#slider-div")
       .append("svg")
-      .attr("width", width*.85)
+      .attr("width", width)
       .attr("height", height*.18);
     var slider = sliderSvg.append("g")
         .attr("class", "slider")
-        .attr("transform", "translate(" + width*.02 + "," + width*.05 + ")");
+        .attr("transform", "translate(" + width*.12 + "," + width*.06 + ")");
 
     slider.append("line")
         .attr("class", "track")
@@ -344,34 +346,68 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .attr("class", "handle")
         .attr("r", 9);
 
-    var slideAll = function(duration) {
+    var pauseValues = {
+      lastT: 0,
+      currentT: 0
+    };
+    var slideAll = function(delay, duration) {
       var i = d3.interpolate(2000, 2016);
       slider.transition()
-        .duration(duration)
+        .ease(d3.easeLinear)
+        .delay(delay)
+        .duration(duration - (duration * pauseValues.lastT))
         .tween("year", function() {
-          return function(t) { year(i(t)); }; 
+          return function(t) { 
+            year(i(t))
+            if (i(t) == "2016") {
+              d3.select(".pause").attr("class", "button play")
+            } 
+            // else if (d3.select(".pause_button").classed("pause")) { 
+            //   console.log('pause')
+            // }
+          }
+
+        })
+        .on("end", function(){
+          pauseValues = {
+            lastT: 0,
+            currentT: 0
+          };
+         // transition()
         });
+
     }
-    slideAll(1400);
+    slideAll(0, 0);
 
-    d3.select(".play_button")
-      .on("mouseover", function() {
-        d3.select(".play_button")
-          .classed("hover", true)
-      })
-      .on("mouseout", function() {
-        d3.select(".play_button")
-          .classed("hover", false)
-      })
-      .on("click", function() {
-        d3.select(".play_button")
-          .classed("active", true)
-        slideAll(10000)
-        console.log((handle.attr("cx")/(sliderWidth))*16 + 2000)
+    d3.select(".button")
+      .on("click", function() {      
+            if (d3.select(".button").attr("class") == "button play") {
+             d3.select(".play").attr("class","button pause")
+               slideAll(0, 10000)
+            } else {console.log('pause')
+              d3.select(".pause").attr("class", "button play")
+            handle.transition().duration(0)
+              setTimeout(function(){
+                pauseValues.lastT = pauseValues.currentT;
+              }, 100);
+            }
 
-        
+     
+        console.log((handle.attr("cx")/(sliderWidth))*16 + 2000)    
       })
-    
+
+    // d3.select(".pause")
+    //   .on("click", function() {
+    //     console.log('hi')
+    //     d3.select(".pause")
+    //     //  .attr("class", "play_button")
+    //        .classed("play", true)
+    //        .classed("pause", false)
+    //  //   slideAll(0, 10000)
+    //   })
+
+
+
     d3.selectAll(".category_button")
       .on("mouseover", function() {
         d3.select(this)
