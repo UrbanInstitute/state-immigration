@@ -150,7 +150,7 @@
 }
 
 .ui-selectmenu-menu .ui-menu  {
-  width: 16em !important;
+  width: 15.8em !important;
 }
 
 
@@ -213,6 +213,7 @@ svg.legend-text-div {
   font-weight: 700;
 }
 .header.policies {
+  
   
 }
 .text-subheader, .text-subheader-mobile {
@@ -328,10 +329,10 @@ fill:#fdbf11 !important;
     width: 30%;
   }
 
-  .ui-widget {
-    font-size: .8em !important;
+  .category_button {
+    margin-bottom: 0px;
+    margin-top: 35px;
   }
-
 
   .place-label {
     font-size: 10px;
@@ -347,9 +348,6 @@ fill:#fdbf11 !important;
     width: auto !important;
   }
 
-  .ui-selectmenu-button.ui-button {
-    width: 22em !important;
-  }
 
   .header.policies {
     margin-left: 14em;
