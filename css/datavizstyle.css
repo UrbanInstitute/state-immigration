@@ -87,6 +87,11 @@
   color: white;
 }
 
+.category_button span:hover{
+  background-color: #231f20;
+  color: white;
+}
+
 .category_button span{
     color: #333;
     background-color: #f2f2f2;

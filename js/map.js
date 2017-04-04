@@ -203,42 +203,42 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
 
 
-    $("#dropdown-menu-category")
-      .selectmenu({
-         open: function( event, ui ) {
-             d3.select("body").style("height", (d3.select(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").node().getBoundingClientRect().height*12) + "px")
-             pymChild.sendHeight();
-          },
-          close: function(event, ui){
-            d3.select("body").style("height", null)
-            pymChild.sendHeight();
-          },
-         change: function(event, d){
-            console.log(selectedPolicy)           
-            var selectedCategory = this.value;
-            var dropdown = d3.select("#dropdown-menu-policy")
-            dropdown.selectAll("option").remove()
-            dropdown.selectAll("option")
-                .data(descriptions.filter(function(d) {
-                  console.log(d.category == selectedCategory)
-                  return d.category == selectedCategory
-            //       if (a.CZ.toLowerCase() < b.CZ.toLowerCase()) return -1;
-            // if (a.CZ.toLowerCase() > b.CZ.toLowerCase()) return 1;
-            // return 0;
-              }))
-              .enter()
-              .append("option")
-              .attr("value", function(d){ return d.policy_short;})
-              .text(function(d){return d.policy_long;})
-            $("#dropdown-menu-policy").selectmenu( "refresh" );
-            var policyMenu = document.getElementById("dropdown-menu-policy");
-            var selectedPolicy = policyMenu[policyMenu.selectedIndex].value 
-            changeProperties(selectedPolicy);
-          }
-      })     
+    // $("#dropdown-menu-category")
+    //   .selectmenu({
+    //      open: function( event, ui ) {
+    //          d3.select("body").style("height", (d3.select(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").node().getBoundingClientRect().height*12) + "px")
+    //          pymChild.sendHeight();
+    //       },
+    //       close: function(event, ui){
+    //         d3.select("body").style("height", null)
+    //         pymChild.sendHeight();
+    //       },
+    //      change: function(event, d){
+    //         console.log(selectedPolicy)           
+    //         var selectedCategory = this.value;
+    //         var dropdown = d3.select("#dropdown-menu-policy")
+    //         dropdown.selectAll("option").remove()
+    //         dropdown.selectAll("option")
+    //             .data(descriptions.filter(function(d) {
+    //               console.log(d.category == selectedCategory)
+    //               return d.category == selectedCategory
+    //         //       if (a.CZ.toLowerCase() < b.CZ.toLowerCase()) return -1;
+    //         // if (a.CZ.toLowerCase() > b.CZ.toLowerCase()) return 1;
+    //         // return 0;
+    //           }))
+    //           .enter()
+    //           .append("option")
+    //           .attr("value", function(d){ return d.policy_short;})
+    //           .text(function(d){return d.policy_long;})
+    //         $("#dropdown-menu-policy").selectmenu( "refresh" );
+    //         var policyMenu = document.getElementById("dropdown-menu-policy");
+    //         var selectedPolicy = policyMenu[policyMenu.selectedIndex].value 
+    //         changeProperties(selectedPolicy);
+    //       }
+    //   })     
                   
-      .selectmenu( "menuWidget" )
-      .addClass( "ui-menu-icons customicons" );
+    //   .selectmenu( "menuWidget" )
+    //   .addClass( "ui-menu-icons customicons" );
 
 
     $("#dropdown-menu-policy")
@@ -345,10 +345,10 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .attr("r", 9);
 
     var slideAll = function(duration) {
+      var i = d3.interpolate(2000, 2016);
       slider.transition()
         .duration(duration)
         .tween("year", function() {
-          var i = d3.interpolate(2000, 2016);
           return function(t) { year(i(t)); }; 
         });
     }
@@ -357,24 +357,52 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     d3.select(".play_button")
       .on("mouseover", function() {
         d3.select(".play_button")
-          .classed("active", true)
+          .classed("hover", true)
       })
       .on("mouseout", function() {
         d3.select(".play_button")
-          .classed("active", false)
+          .classed("hover", false)
       })
       .on("click", function() {
-        console.log('play')
-        slideAll(10000)
-      })
-    d3.select(".category_button")
-      .on("mouseover", function() {
-        d3.select(".category_button")
+        d3.select(".play_button")
           .classed("active", true)
+        slideAll(10000)
+        console.log((handle.attr("cx")/(sliderWidth))*16 + 2000)
+
+        
+      })
+    
+    d3.selectAll(".category_button")
+      .on("mouseover", function() {
+        d3.select(this)
+          .classed("hover", true)
+      })
+      .on("mouseout", function() {
+        d3.select(this)
+          .classed("hover", false)
       })
       .on("click", function() {
-        // console.log('play')
-        // slideAll(10000)
+        d3.selectAll(".category_button.active").classed("active",false)
+        d3.select(this).classed("active", true)
+        var selectedCategory = d3.select(".category_button.active").node().id
+        var dropdown = d3.select("#dropdown-menu-policy")
+            dropdown.selectAll("option").remove()
+            dropdown.selectAll("option")
+                .data(descriptions.filter(function(d) {
+                  console.log(d.category == selectedCategory)
+                  return d.category == selectedCategory
+            //       if (a.CZ.toLowerCase() < b.CZ.toLowerCase()) return -1;
+            // if (a.CZ.toLowerCase() > b.CZ.toLowerCase()) return 1;
+            // return 0;
+              }))
+              .enter()
+              .append("option")
+              .attr("value", function(d){ return d.policy_short;})
+              .text(function(d){return d.policy_long;})
+            $("#dropdown-menu-policy").selectmenu( "refresh" );
+            var policyMenu = document.getElementById("dropdown-menu-policy");
+            var selectedPolicy = policyMenu[policyMenu.selectedIndex].value 
+            changeProperties(selectedPolicy);
       })
     function year(selectedYear) {
      
