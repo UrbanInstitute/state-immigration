@@ -300,7 +300,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
   }
    
 /*SLIDER- thanks to https://bl.ocks.org/mbostock/6452972 */
-    var sliderWidth = width*.55
+    var sliderWidth = width*.8
     var x = d3.scaleLinear()
         .domain([2000, 2016])
         .range([0, sliderWidth])
@@ -310,11 +310,11 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
     var sliderSvg = d3.select("#slider-div")
       .append("svg")
-      .attr("width", width*.65)
-      .attr("height", height*.15);
+      .attr("width", width*.85)
+      .attr("height", height*.18);
     var slider = sliderSvg.append("g")
         .attr("class", "slider")
-        .attr("transform", "translate(" + width*.02 + "," + 10 + ")");
+        .attr("transform", "translate(" + width*.02 + "," + width*.05 + ")");
 
     slider.append("line")
         .attr("class", "track")
@@ -367,7 +367,15 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         console.log('play')
         slideAll(10000)
       })
-
+    d3.select(".category_button")
+      .on("mouseover", function() {
+        d3.select(".category_button")
+          .classed("active", true)
+      })
+      .on("click", function() {
+        // console.log('play')
+        // slideAll(10000)
+      })
     function year(selectedYear) {
      
       handle.attr("cx", x(selectedYear));

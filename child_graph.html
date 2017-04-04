@@ -40,28 +40,43 @@
 
 <div class="wrapper"> 
   <div id="nav-options">
-    <div id="slider">
+    <div id="selections-div">
+    <!--  <div class="dropdown-div">
+          <select id = "dropdown-menu-category" name = "dropdown-menu-1">
+              <option value="integration">Integration</option>
+              <option value="enforcement">Enforcement</option>
+              <option value="public_benefits">Public Benefits</option>
+          </select>
+      </div> -->
+      <div id="category-buttons-div">
+        <div class="header">CATEGORIES</div>
+        <div class="category_button" value="integration">
+          <span>Integration</span>
+        </div>
+        <div class="category_button" value="enforcement">
+          <span>Enforcement</span>
+        </div>
+        <div class="category_button" value="public_benefits">
+          <span>Public Benefits</span>
+        </div>
+      </div>
+      <div class="dropdown-div">
+        <div class="header">POLICIES</div>
+          <select id = "dropdown-menu-policy" name = "dropdown-menu-2">
+              <option value="tuition">In-state tuition for undocumented students</option>
+              <option value="financial">State financial aid for undocumented students</option>
+              <option value="ban">Denies university enrollment to undocumented students</option>
+              <option value="driver">State driver's license for undocumented immigrants</option>
+              <option value="english">English is official language</option>
+          </select>
+      </div>
+    </div>
+    <div id="years-div">
       <div class="play_button">
-        <span>Show all years</span>
+        <span>Play</span>
       </div>
       <div id="slider-div">
       </div>
-    </div>
-    <div class="dropdown-div">
-        <select id = "dropdown-menu-category" name = "dropdown-menu-1">
-            <option value="integration">Integration</option>
-            <option value="enforcement">Enforcement</option>
-            <option value="public_benefits">Public Benefits</option>
-        </select>
-    </div>
-    <div class="dropdown-div">
-        <select id = "dropdown-menu-policy" name = "dropdown-menu-2">
-            <option value="tuition">In-state tuition for undocumented students</option>
-            <option value="financial">State financial aid for undocumented students</option>
-            <option value="ban">Denies university enrollment to undocumented students</option>
-            <option value="driver">State driver's license for undocumented immigrants</option>
-            <option value="english">English is official language</option>
-        </select>
     </div>
   </div>
   <div id="map">
