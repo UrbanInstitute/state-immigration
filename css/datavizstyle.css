@@ -149,6 +149,11 @@
   font-size: 16px;
 }
 
+.text-definition-1, .text-definition-2 {
+  font-style: italic;
+}
+
+
 .ui-selectmenu-menu .ui-menu  {
   width: 15.8em !important;
 }
@@ -300,22 +305,39 @@ fill:#fdbf11 !important;
 
 @media (max-width: 479px) {
 
-
-  #inset {
-    width: 100%;
-    max-width: none;
-    min-width: 0px;
-    margin-left: 0px;
-    float: left;
-    border-left-style: none;
-    padding-left: 0px !important;
-  }
-  
-  .place-label {
-    font-size: 9px !important;
+  .ui-selectmenu-button.ui-button {
+    width: 10em !important;
   }
 
+  .ui-selectmenu-text {
+    width: 90px !important;
+  }
 
+    #inset {
+      width: 100%;
+      max-width: none;
+      min-width: 0px;
+      margin-left: 0px;
+      float: left;
+      border-left-style: none;
+      padding-left: 0px !important;
+    }
+    
+    .place-label {
+      font-size: 9px !important;
+    }
+
+  .text-policy-title {
+    font-size: 14px;
+  }
+
+  #category-buttons-div {
+    width: 60% !important;
+  }
+
+  .header.policies {
+    margin-left: none !important;
+  }
 
 
 
@@ -326,7 +348,7 @@ fill:#fdbf11 !important;
 
 
   #category-buttons-div {
-    width: 30%;
+    width: 40%;
   }
 
   .category_button {
@@ -354,6 +376,10 @@ fill:#fdbf11 !important;
 
   #nav-options {
     height: 230px;
+  }
+
+  .text-body-year {
+    font-size: 14px;
   }
 
 }

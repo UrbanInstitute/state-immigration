@@ -38,13 +38,13 @@ function drawGridMap(container_width){
 
   var $map = $("#map");
   var aspect_width = 25;
-  var aspect_height = 18;
+  var aspect_height = (IS_PHONE) ? 25 : 18;
   var margin = { top: 10, right: 5, bottom: 10, left: 5 };
   var width= container_width - margin.left - margin.right; 
   var height = Math.ceil((width * aspect_height) / aspect_width) - margin.top - margin.bottom; 
 
   var projection = d3.geoEquirectangular()
-    .scale((IS_PHONE) ? width*3.2 : width*2.7)
+    .scale((IS_PHONE) ? width*4 : width*2.7)
     .center([-96.03542,41.69553])
     .translate(IS_PHONE ? [width /2.3, height /2.1] : [width /3.3, height /2.4]);
 
@@ -137,7 +137,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .range([ "#d2d2d2", "#1696d2", "#fdbf11"]);
       var legendText = ["None of highest-immigrant counties had the policy", "Some of highest-immigrant counties had the policy", "All of highest immigrant counties had the policy"]
 
-      var legendY = (IS_PHONE) ? width*.65 : width*.56
+      var legendY = (IS_PHONE) ? width*.85 : width*.56
       var legend = chartMap.svg.append('g')
           .attr("width", width*.2)
           .attr("height", width*.2)
@@ -156,10 +156,11 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           .attr("height", 8 + "px")
           .style("fill", legendColor);
 
+      var legendTextY = (IS_PHONE) ? width*.017 : width*.012
       legend.append("text")
           .data(legendText)
           .attr("x", width*.025)
-          .attr("y", width*.012)
+          .attr("y", legendTextY)
           .text(function(d) { 
             return d
           });
@@ -171,13 +172,16 @@ d3.json("data/combined-data.geojson", function(error1, states) {
  //    //STATE TEXT INFO
     var stateTextX = (IS_PHONE) ? width*.09 : width*.26
     var svg2Width = (IS_PHONE) ? width*.9 : width*.33;
+    var definition1_Y = (IS_PHONE) ? width*.38 : width*.505
+    var definition2_Y = (IS_PHONE) ? width*.43 : width*.565
+
     chartMap.svg2 = d3.select("#map")
           .append("svg")
           .attr("width", svg2Width)
-          .attr("height", height*1.1)
+          .attr("height", height)
+      //    .attr("transform", function() {return "translate("+ 0 +", " + -width*.1 + ")"; })  
 
     var stateText = chartMap.svg2.append("g")
-        //  .attr("transform", function() {return "translate("+ svg2X+", " + 0 + ")"; })  
 
     var textStart = width*.015
     stateText.append("text")
@@ -198,49 +202,20 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .attr("class", "text-body-description")
       .attr("transform", function() { return "translate("+ textStart+", " + width*.15 + ")"; })
       .text("") 
+
+    stateText.append("text") 
+      .attr("class", "text-definition-1")
+      .attr("transform", function() { return "translate("+ textStart+", " + definition1_Y + ")"; })
+      .text("") 
+    stateText.append("text") 
+      .attr("class", "text-definition-2")
+      .attr("transform", function() { return "translate("+ textStart+", " + definition2_Y + ")"; })
+      .text("") 
     chartMap.svg.append("text") 
       .attr("class", "text-policy-title")
-      .attr("transform", function() { return "translate("+ width*.01+", " + width*.04 + ")"; })
+      .attr("transform", function() { return "translate("+ width*.01+", " + width*.03 + ")"; })
       .text("") 
 
-
-
-    // $("#dropdown-menu-category")
-    //   .selectmenu({
-    //      open: function( event, ui ) {
-    //          d3.select("body").style("height", (d3.select(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").node().getBoundingClientRect().height*12) + "px")
-    //          pymChild.sendHeight();
-    //       },
-    //       close: function(event, ui){
-    //         d3.select("body").style("height", null)
-    //         pymChild.sendHeight();
-    //       },
-    //      change: function(event, d){
-    //         console.log(selectedPolicy)           
-    //         var selectedCategory = this.value;
-    //         var dropdown = d3.select("#dropdown-menu-policy")
-    //         dropdown.selectAll("option").remove()
-    //         dropdown.selectAll("option")
-    //             .data(descriptions.filter(function(d) {
-    //               console.log(d.category == selectedCategory)
-    //               return d.category == selectedCategory
-    //         //       if (a.CZ.toLowerCase() < b.CZ.toLowerCase()) return -1;
-    //         // if (a.CZ.toLowerCase() > b.CZ.toLowerCase()) return 1;
-    //         // return 0;
-    //           }))
-    //           .enter()
-    //           .append("option")
-    //           .attr("value", function(d){ return d.policy_short;})
-    //           .text(function(d){return d.policy_long;})
-    //         $("#dropdown-menu-policy").selectmenu( "refresh" );
-    //         var policyMenu = document.getElementById("dropdown-menu-policy");
-    //         var selectedPolicy = policyMenu[policyMenu.selectedIndex].value 
-    //         changeProperties(selectedPolicy);
-    //       }
-    //   })     
-                  
-    //   .selectmenu( "menuWidget" )
-    //   .addClass( "ui-menu-icons customicons" );
 
 
     $("#dropdown-menu-policy")
@@ -285,12 +260,36 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             }))
             .text(function(d) {
               if (chartMap.map.classed("no_data") && slideYear() == '16') {
-                console.log('no data');
+                console.log(d.definition1);
                 return "No data"
-              } console.log('description')
+              } console.log(d.definition1);
               return d.description
             })
             .call(wrapText, wrapWidth)
+          d3.select(".text-definition-1")
+            .data(descriptions.filter(function(d) {
+              return selectedPolicy == d.policy_short
+            }))
+            .text(function(d) {
+              if (chartMap.map.classed("no_data") && slideYear() == '16') {
+                console.log(d.definition1);
+                return ""
+              } console.log(d.definition1);
+              return d.definition1
+            })
+            .call(wrapText, wrapWidth)
+          d3.select(".text-definition-2")
+            .data(descriptions.filter(function(d) {
+              return selectedPolicy == d.policy_short
+            }))
+            .text(function(d) {
+              if (chartMap.map.classed("no_data") && slideYear() == '16') {
+                return ""
+              } 
+              return d.definition2
+            })
+            .call(wrapText, wrapWidth)
+
           d3.select(".text-policy-title")
             .data(descriptions.filter(function(d) {
               return selectedPolicy == d.policy_short
@@ -435,10 +434,10 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               .append("option")
               .attr("value", function(d){ return d.policy_short;})
               .text(function(d){return d.policy_long;})
-            $("#dropdown-menu-policy").selectmenu( "refresh" );
-            var policyMenu = document.getElementById("dropdown-menu-policy");
-            var selectedPolicy = policyMenu[policyMenu.selectedIndex].value 
-            changeProperties(selectedPolicy);
+      $("#dropdown-menu-policy").selectmenu( "refresh" );
+      var policyMenu = document.getElementById("dropdown-menu-policy");
+      var selectedPolicy = policyMenu[policyMenu.selectedIndex].value 
+      changeProperties(selectedPolicy);
       })
     function year(selectedYear) {
      
@@ -448,36 +447,62 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       // var slideYearRounded = Math.round(selectedYear)
       // selectedyear()
       // var slideYear = slideYearRounded.toString().split('20')[1]
-      chartMap.map
-        .style("fill", function(d) {
-
-            return color(d["properties"][selectedPolicy + "_" + slideYear()]);
-        })
-        .classed("no_data", function(d) {
-          if ((d["properties"][selectedPolicy + "_" + slideYear()] == null) && slideYear() == '16') {
-            return true
-          } return false
-        })
       stateText.select(".text-body-year")
         .text("20" + slideYear())
-      d3.select(".text-body-description")
-        .data(descriptions.filter(function(d) {
-          return selectedPolicy == d.policy_short
-        }))
-        .text(function(d) {
-          if (chartMap.map.classed("no_data") && slideYear() == '16') {
-            return "No data"
-          }
-          return d.description
-        })
-        .call(wrapText, wrapWidth)
-      d3.select(".text-policy-title")
-        .data(descriptions.filter(function(d) {
-          return selectedPolicy == d.policy_short
-        }))
-        .text(function(d) {
-          return d.policy_long
-        })
+      changeProperties(selectedPolicy)
+      // chartMap.map
+      //   .style("fill", function(d) {
+
+      //       return color(d["properties"][selectedPolicy + "_" + slideYear()]);
+      //   })
+      //   .classed("no_data", function(d) {
+      //     if ((d["properties"][selectedPolicy + "_" + slideYear()] == null) && slideYear() == '16') {
+      //       return true
+      //     } return false
+      //   })
+    
+      // d3.select(".text-body-description")
+      //   .data(descriptions.filter(function(d) {
+      //     return selectedPolicy == d.policy_short
+      //   }))
+      //   .text(function(d) {
+      //     if (chartMap.map.classed("no_data") && slideYear() == '16') {
+      //       return "No data"
+      //     }
+      //     return d.description
+      //   })
+      //   .call(wrapText, wrapWidth)
+      // d3.select(".text-policy-title")
+      //   .data(descriptions.filter(function(d) {
+      //     return selectedPolicy == d.policy_short
+      //   }))
+      //   .text(function(d) {
+      //     return d.policy_long
+      //   })
+      // d3.select(".text-definition-1")
+      //   .data(descriptions.filter(function(d) {
+      //     return selectedPolicy == d.policy_short
+      //   }))
+      //   .text(function(d) {
+      //     if (chartMap.map.classed("no_data") && slideYear() == '16') {
+      //       console.log(d.definition1);
+      //       return ""
+      //     } console.log(d.definition1);
+      //     return d.definition1
+      //   })
+      //   .call(wrapText, wrapWidth)
+      // d3.select(".text-definition-2")
+      //   .data(descriptions.filter(function(d) {
+      //     return selectedPolicy == d.policy_short
+      //   }))
+      //   .text(function(d) {
+      //     if (chartMap.map.classed("no_data") && slideYear() == '16') {
+      //       console.log(d.definition2);
+      //       return ""
+      //     } console.log(d.definition2);
+      //     return d.definition2
+      //   })
+      //   .call(wrapText, wrapWidth)
     }
 
   
