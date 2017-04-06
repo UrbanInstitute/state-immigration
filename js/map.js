@@ -38,7 +38,7 @@ function drawGridMap(container_width){
 
   var $map = $("#map");
   var aspect_width = 25;
-  var aspect_height = (IS_PHONE) ? 24 : 18;
+  var aspect_height = (IS_PHONE) ? 26 : 18;
   var margin = { top: 10, right: 5, bottom: 10, left: 5 };
   var width= container_width - margin.left - margin.right; 
   var height = Math.ceil((width * aspect_height) / aspect_width) - margin.top - margin.bottom; 
@@ -46,7 +46,7 @@ function drawGridMap(container_width){
   var projection = d3.geoEquirectangular()
     .scale((IS_PHONE) ? width*4 : width*2.7)
     .center([-96.03542,41.69553])
-    .translate(IS_PHONE ? [width /2.3, height /2.1] : [width /3.3, height /2.4]);
+    .translate(IS_PHONE ? [width /2.3, height /1.9] : [width /3.3, height /2.4]);
 
   var path = d3.geoPath()
     .projection(projection);
@@ -140,7 +140,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .range([ "#d2d2d2", "#1696d2", "#fdbf11"]);
       var legendText = ["None of highest-immigrant counties had the policy", "Some of highest-immigrant counties had the policy", "All of highest immigrant counties had the policy"]
       var legendX = (IS_PHONE) ? 0 : width*.12
-      var legendY = (IS_PHONE) ? width*.85 : width*.56
+      var legendY = (IS_PHONE) ? width*.93 : width*.56
       var legend = chartMap.svg.append('g')
           .attr("width", width*.2)
           .attr("height", width*.2)
@@ -177,8 +177,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
  //    //STATE TEXT INFO
     var stateTextX = (IS_PHONE) ? width*.09 : width*.26
     var svg2Width = (IS_PHONE) ? width*.9 : width*.33;
-    var definition1_Y = (IS_PHONE) ? width*.38 : width*.505
-    var definition2_Y = (IS_PHONE) ? width*.43 : width*.565
+    var definition2_Y = (IS_PHONE) ? width*.45 : width*.565
 
     chartMap.svg2 = d3.select("#map")
           .append("svg")
@@ -194,6 +193,9 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           })  
     var textStart = 0
     var textDescriptionHeader = (container_width < 400) ? width*.17 : width*.12
+    var definition1_Y = (container_width < 400) ? textDescriptionHeader *4 : width*.57
+    var definition2_Y = (container_width < 400) ? textDescriptionHeader *4.5 : width*.63
+
     var textYearHeader = (container_width < 400) ? width*.02 : width*.02
 
     stateText.append("text")
@@ -207,7 +209,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
   
     stateText.append("text")
       .attr("class", "text-body-year")
-      .attr("transform", function() { return "translate("+ textStart+", " + (textYearHeader*3) + ")"; })
+      .attr("transform", function() { return "translate("+ textStart+", " + (textYearHeader*3.4) + ")"; })
       .text("")  
   
     stateText.append("text")
@@ -223,7 +225,9 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .attr("class", "text-definition-2")
       .attr("transform", function() { return "translate("+ textStart+", " + definition2_Y + ")"; })
       .text("") 
-    var titleY = (IS_PHONE) ? width*.045 : width*.03;
+
+    var titleY = (IS_PHONE) ? width*.06 : width*.03;
+
     chartMap.svg.append("text") 
       .attr("class", "text-policy-title")
       .attr("transform", function() { return "translate("+ 0 +", " + titleY + ")"; })

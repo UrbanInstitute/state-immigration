@@ -29,10 +29,11 @@
 
 .ui-selectmenu-button.ui-button {
   height: 35px !important;
+  width: 350px !important;
 }
 
 .ui-selectmenu-text {
-  width: 150px !important;
+  width: 300px !important;
   margin-top: 7px !important;
 }
 
@@ -40,7 +41,7 @@
 #nav-options {
     position: relative;
     width: 100%;
-    height: 160px;
+    height: 250px;
     margin-bottom: 10px
 }
 
@@ -156,7 +157,7 @@
 
 
 .ui-selectmenu-menu .ui-menu  {
-  width: 15.8em !important;
+  width: 375px !important;
 }
 
 
@@ -259,13 +260,9 @@ fill:#fdbf11 !important;
     font-family: "Lato", sans-serif;
     font-weight: bold;
     font-size: 12px;
-    cursor: pointer;
     pointer-events: none;
  }
 
- path {
-   cursor: pointer;
- }
 
 
 /*SLIDER*/
