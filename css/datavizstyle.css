@@ -74,16 +74,17 @@
 }
 
 .dropdown-container {
-  float: left;
+  float:right; 
+  width: 32%;
+  height: 80px;
 }
 #dropdown-menu-policy-button {
   margin-top: 1em;
-  position: absolute;
   right: 0px;
 }
 
 #category-buttons-div {
-  width: 68%;
+  width: 59%;
   float: left;
 }
 
@@ -235,6 +236,10 @@ body{
 .text-policy-title {
   font-size: 16px;
 }
+
+.text-policy-subtitle {
+  fill: #ec008b;
+}
 }
 .text-body-description {
   font-size: 13px;
@@ -302,7 +307,13 @@ fill:#fdbf11 !important;
 /*ADJUSTING FOR SCREEN WIDTHS */
 
   
+@media (max-width: 479px) {
+  #category-buttons-div {
+    min-height: 100px;
+    height: auto;
+  }
 
+}
 @media (max-width: 479px) {
 
   .ui-selectmenu-button.ui-button {
@@ -313,27 +324,24 @@ fill:#fdbf11 !important;
     width: 90px !important;
   }
 
-    #inset {
-      width: 100%;
-      max-width: none;
-      min-width: 0px;
-      margin-left: 0px;
-      float: left;
-      border-left-style: none;
-      padding-left: 0px !important;
-    }
-    
-    .place-label {
-      font-size: 9px !important;
-    }
+  #inset {
+    width: 100%;
+    max-width: none;
+    min-width: 0px;
+    margin-left: 0px;
+    float: left;
+    border-left-style: none;
+    padding-left: 0px !important;
+  }
+  
+  .place-label {
+    font-size: 9px !important;
+  }
 
   .text-policy-title {
     font-size: 14px;
   }
 
-  #category-buttons-div {
-    width: 60% !important;
-  }
 
   .header.policies {
     margin-left: none !important;
@@ -347,6 +355,10 @@ fill:#fdbf11 !important;
     font-size: 13px;
   }
 
+  .button {
+    margin-top: .8em !important;
+  }
+
 
 
 }
@@ -355,9 +367,6 @@ fill:#fdbf11 !important;
  @media (max-width: 600px) {
 
 
-  #category-buttons-div {
-    width: 40%;
-  }
 
   .category_button {
     margin-bottom: .5em;
@@ -378,18 +387,30 @@ fill:#fdbf11 !important;
   }
 
 
-  .header.policies {
-    margin-left: 14em;
-  }
 
   #nav-options {
-    height: 230px;
+    height: 250px;
   }
 
   .text-body-year {
     font-size: 14px;
   }
 
+}
+
+@media (max-width: 710px) {
+  #category-buttons-div{
+  width:100%; 
+  margin-bottom:20px:
+  }
+
+  .dropdown-container{
+    width:100%;
+    margin-top: 2em;
+    }
+  .button {
+    margin-top: 2em;
+  }
 }
 
 

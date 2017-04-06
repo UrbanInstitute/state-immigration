@@ -191,7 +191,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               return "translate("+ 0 +", " + width*.02 + ")"
             }; 
           })  
-    var textStart = width*.015
+    var textStart = 0
     stateText.append("text")
       .attr("class", "header")
       .attr("transform", function() { return "translate("+ textStart+", " + width*.03 + ")"; })
@@ -219,13 +219,14 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .attr("class", "text-definition-2")
       .attr("transform", function() { return "translate("+ textStart+", " + definition2_Y + ")"; })
       .text("") 
+    var titleY = (IS_PHONE) ? width*.045 : width*.03;
     chartMap.svg.append("text") 
       .attr("class", "text-policy-title")
-      .attr("transform", function() { return "translate("+ 0 +", " + width*.04 + ")"; })
+      .attr("transform", function() { return "translate("+ 0 +", " + titleY + ")"; })
       .text("") 
     chartMap.svg.append("text") 
       .attr("class", "text-policy-subtitle")
-      .attr("transform", function() { return "translate("+ 0 +", " + width*.07 + ")"; })
+      .attr("transform", function() { return "translate("+ 0 +", " + width*.075 + ")"; })
       .text("") 
 
 
@@ -319,21 +320,21 @@ d3.json("data/combined-data.geojson", function(error1, states) {
   }
    
 /*SLIDER- thanks to https://bl.ocks.org/mbostock/6452972 */
-    var sliderWidth = width*.85
+    var sliderWidth = (container_width < 400) ? width*.71 : width*.85
     var x = d3.scaleLinear()
         .domain([2000, 2016])
         .range([0, sliderWidth])
         .clamp(true);
     
     $("#slider-div").empty()
-
+    var sliderX =  (container_width < 400) ? width*.17 : width* .12
     var sliderSvg = d3.select("#slider-div")
       .append("svg")
       .attr("width", width)
       .attr("height", height*.18);
     var slider = sliderSvg.append("g")
         .attr("class", "slider")
-        .attr("transform", "translate(" + width*.12 + "," + width*.06 + ")");
+        .attr("transform", "translate(" + sliderX + "," + width*.06 + ")");
 
     slider.append("line")
         .attr("class", "track")
@@ -348,7 +349,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             .on("start drag", function() { 
               year(x.invert(d3.event.x)); 
             }));
-
+    var tickText = ["'00", "'02", "'04", "'06", "'08", "'10", "'12", "'14", "'16"] 
     slider.insert("g", ".track-overlay")
         .attr("class", "ticks")
         .attr("transform", "translate(0," + 18 + ")")
@@ -357,7 +358,11 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .enter().append("text")
         .attr("x", x)
         .attr("text-anchor", "middle")
-        .text(function(d) { return d; });
+        .text(function(d) {
+          if (IS_PHONE) {
+            return "'" + d.toString().split('20')[1]
+          }   return d; 
+        });
 
     var handle = slider.insert("circle", ".track-overlay")
         .attr("class", "handle")
