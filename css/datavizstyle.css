@@ -323,6 +323,10 @@ fill:#fdbf11 !important;
     width: 90px !important;
   }
 
+  .ui-selectmenu-menu .ui-menu {
+    width: 156px !important;
+  }
+
   #inset {
     width: 100%;
     max-width: none;
