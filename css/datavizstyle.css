@@ -91,7 +91,7 @@
     margin-top: 2.5em;
     padding: 5 10 5 10px;
     float: left;
-    margin-right: 10px;
+    margin-right: .5em;
     background-color: #e6e7e8;
     color: #404041;
     cursor: pointer;
@@ -339,6 +339,14 @@ fill:#fdbf11 !important;
     margin-left: none !important;
   }
 
+  .legend-text {
+    font-size: 10px;
+  }
+
+  .header {
+    font-size: 13px;
+  }
+
 
 
 }
@@ -352,7 +360,7 @@ fill:#fdbf11 !important;
   }
 
   .category_button {
-    margin-bottom: 8px;
+    margin-bottom: .5em;
   }
 
   .place-label {
