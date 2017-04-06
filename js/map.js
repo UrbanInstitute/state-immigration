@@ -101,6 +101,8 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
     // var wrapWidth = (IS_MOBILE && !IS_PHONE) ? 220 : 100;
     var wrapWidth = (IS_PHONE) ? width*.78 : width*.31;
+    var wrapWidthTitle = (IS_PHONE) ? width*.78 : width;
+
     var mapWidth = (IS_PHONE) ? width*.9 : width*.65
 
     chartMap.svg = d3.select("#map")
@@ -306,7 +308,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             .text(function(d) {
               return d.policy_long
             })
-            .call(wrapText, wrapWidth)
+            .call(wrapText, wrapWidthTitle)
           d3.select(".text-policy-subtitle")
             .data(descriptions.filter(function(d) {
               return selectedPolicy == d.policy_short
