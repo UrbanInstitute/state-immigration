@@ -81,7 +81,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             word,
             line = [],
             lineNumber = 0,
-            lineHeight = 1.5, // ems
+            lineHeight = (IS_PHONE) ? 1.1 : 1.5, // ems
             y = width*.05,
             x = 0,
             dy = -1,
@@ -135,6 +135,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       });
 
     var addLegend = function() {
+    //  var gY = (container_width < 400) ? width*.05*i : width*.03*i;
       var legendColor = d3.scaleOrdinal()
         .range([ "#d2d2d2", "#1696d2", "#fdbf11"]);
       var legendText = ["None of highest-immigrant counties had the policy", "Some of highest-immigrant counties had the policy", "All of highest immigrant counties had the policy"]
@@ -149,17 +150,17 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           .enter()
           .append("g")
           .attr("transform", function(d,i) {
-            return "translate(0,"+ (width*.03*i) + ")"; 
+            return "translate(0,"+ ((container_width < 400) ? width*.04*i : width*.03*i) + ")"; 
           })
           .attr("class", "legend")
 
         legend.append("rect")
-          .attr("width", 8 + "px")
-          .attr("height", 8 + "px")
+          .attr("width", width*.02 + "px")
+          .attr("height", width*.02 + "px")
           .style("fill", legendColor);
 
       var legendTextX = (IS_PHONE) ? width*.035 : width*.025
-      var legendTextY = (IS_PHONE) ? width*.017 : width*.012
+      var legendTextY = (IS_PHONE) ? width*.017 : width*.015
       legend.append("text")
           .data(legendText)
           .attr("x", legendTextX)
@@ -192,23 +193,26 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             }; 
           })  
     var textStart = 0
+    var textDescriptionHeader = (container_width < 400) ? width*.17 : width*.12
+    var textYearHeader = (container_width < 400) ? width*.02 : width*.02
+
     stateText.append("text")
       .attr("class", "header")
-      .attr("transform", function() { return "translate("+ textStart+", " + width*.03 + ")"; })
+      .attr("transform", function() { return "translate("+ textStart+", " + textYearHeader + ")"; })
       .text("YEAR")
     stateText.append("text")
       .attr("class", "header")
-      .attr("transform", function() { return "translate("+ textStart+", " + width*.12 + ")"; })
+      .attr("transform", function() { return "translate("+ textStart+", " + textDescriptionHeader + ")"; })
       .text("POLICY DESCRIPTION")
   
     stateText.append("text")
       .attr("class", "text-body-year")
-      .attr("transform", function() { return "translate("+ textStart+", " + width*.06 + ")"; })
+      .attr("transform", function() { return "translate("+ textStart+", " + (textYearHeader*3) + ")"; })
       .text("")  
   
     stateText.append("text")
       .attr("class", "text-body-description")
-      .attr("transform", function() { return "translate("+ textStart+", " + width*.15 + ")"; })
+      .attr("transform", function() { return "translate("+ textStart+", " + (textDescriptionHeader*1.25)+ ")"; })
       .text("") 
 
     stateText.append("text") 
