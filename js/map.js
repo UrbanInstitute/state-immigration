@@ -344,7 +344,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .attr("class", "slider")
         .attr("transform", "translate(" + sliderX + "," + width*.06 + ")");
 
-    slider.append("line")
+    var sliderPath = slider.append("line")
         .attr("class", "track")
         .attr("x1", x.range()[0])
         .attr("x2", x.range()[1])
@@ -357,6 +357,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             .on("start drag", function() { 
               year(x.invert(d3.event.x)); 
             }));
+    
     var tickText = ["'00", "'02", "'04", "'06", "'08", "'10", "'12", "'14", "'16"] 
     slider.insert("g", ".track-overlay")
         .attr("class", "ticks")
@@ -388,7 +389,11 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .duration(duration - (duration * pauseValues.lastT))
         .tween("year", function() {
           return function(t) { 
+            var totalLength = sliderPath.node().getTotalLength();
             year(i(t))
+            t += pauseValues.lastT;
+            console.log(pauseValues.lastT)
+            var point = sliderPath.node().getPointAtLength(totalLength*t)
             if (i(t) == "2016") {
               d3.select(".pause").attr("class", "button play")
             } 
@@ -398,13 +403,13 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           }
 
         })
-        .on("end", function(){
-          pauseValues = {
-            lastT: 0,
-            currentT: 0
-          };
-         // transition()
-        });
+        // .on("end", function(){
+        //   pauseValues = {
+        //     lastT: 0,
+        //     currentT: 0
+        //   };
+        //  // transition()
+        // });
 
     }
     slideAll(0, 0);
@@ -425,16 +430,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
      
         console.log((handle.attr("cx")/(sliderWidth))*16 + 2000)    
       })
-
-    // d3.select(".pause")
-    //   .on("click", function() {
-    //     console.log('hi')
-    //     d3.select(".pause")
-    //     //  .attr("class", "play_button")
-    //        .classed("play", true)
-    //        .classed("pause", false)
-    //  //   slideAll(0, 10000)
-    //   })
 
 
 
@@ -471,7 +466,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       changeProperties(selectedPolicy);
       })
     function year(selectedYear) {
-     
       handle.attr("cx", x(selectedYear));
       var policyMenu = document.getElementById("dropdown-menu-policy");
       var selectedPolicy = policyMenu[policyMenu.selectedIndex].value
@@ -481,65 +475,13 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       stateText.select(".text-body-year")
         .text("20" + slideYear())
       changeProperties(selectedPolicy)
-      // chartMap.map
-      //   .style("fill", function(d) {
-
-      //       return color(d["properties"][selectedPolicy + "_" + slideYear()]);
-      //   })
-      //   .classed("no_data", function(d) {
-      //     if ((d["properties"][selectedPolicy + "_" + slideYear()] == null) && slideYear() == '16') {
-      //       return true
-      //     } return false
-      //   })
-    
-      // d3.select(".text-body-description")
-      //   .data(descriptions.filter(function(d) {
-      //     return selectedPolicy == d.policy_short
-      //   }))
-      //   .text(function(d) {
-      //     if (chartMap.map.classed("no_data") && slideYear() == '16') {
-      //       return "No data"
-      //     }
-      //     return d.description
-      //   })
-      //   .call(wrapText, wrapWidth)
-      // d3.select(".text-policy-title")
-      //   .data(descriptions.filter(function(d) {
-      //     return selectedPolicy == d.policy_short
-      //   }))
-      //   .text(function(d) {
-      //     return d.policy_long
-      //   })
-      // d3.select(".text-definition-1")
-      //   .data(descriptions.filter(function(d) {
-      //     return selectedPolicy == d.policy_short
-      //   }))
-      //   .text(function(d) {
-      //     if (chartMap.map.classed("no_data") && slideYear() == '16') {
-      //       console.log(d.definition1);
-      //       return ""
-      //     } console.log(d.definition1);
-      //     return d.definition1
-      //   })
-      //   .call(wrapText, wrapWidth)
-      // d3.select(".text-definition-2")
-      //   .data(descriptions.filter(function(d) {
-      //     return selectedPolicy == d.policy_short
-      //   }))
-      //   .text(function(d) {
-      //     if (chartMap.map.classed("no_data") && slideYear() == '16') {
-      //       console.log(d.definition2);
-      //       return ""
-      //     } console.log(d.definition2);
-      //     return d.definition2
-      //   })
-      //   .call(wrapText, wrapWidth)
+   
     }
 
   
 
 
-    var slideYear = function(selected) {
+    var slideYear = function() {
       var xHandle = (handle.attr("cx")/(sliderWidth))*16 + 2000
       var xHandleRounded = Math.round(xHandle)
       var xHandleYear = xHandleRounded.toString().split('20')[1]
