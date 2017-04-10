@@ -251,13 +251,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
          change: function(event, d){
             var selectedPolicy = this.value
             changeProperties(selectedPolicy)
-             //  var str = "tuition_00"
-             // console.log(str.substring(0, str.lastIndexOf("_") + 1))
-              // var selectedIndex = this.selectedIndex
-              // var selectedData = (data[selectedIndex])
-              // var name = (data[selectedIndex]["CZ"])
-              // var idClass = "id_" + value
-         
           }
       })     
                   
@@ -271,8 +264,9 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             })
             .classed("no_data", function(d) {
               if ((d["properties"][selectedPolicy + "_" + "16"] == null) && slideYear() == '16') {
-                console.log(selectedPolicy);return true
-              } console.log('false'); return false
+                return true
+              }
+              return false
             })
           d3.select(".text-body-description")
             .data(descriptions.filter(function(d) {
@@ -353,7 +347,12 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .select(function() { return this.parentNode.appendChild(this.cloneNode(true)); })
         .attr("class", "track-overlay")
         .call(d3.drag()
-            .on("start.interrupt", function() { slider.interrupt(); })
+            .on("start.interrupt", function() {
+              d3.select(".button")
+                .classed("pause", false)
+                .classed("play", true)
+              slider.interrupt();
+            })
             .on("start drag", function() { 
               year(x.invert(d3.event.x)); 
             }));
@@ -377,57 +376,52 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         .attr("class", "handle")
         .attr("r", 9);
 
-    var pauseValues = {
-      lastT: 0,
-      currentT: 0
-    };
-    var slideAll = function(delay, duration) {
-      var i = d3.interpolate(2000, 2016);
+
+    function getYear(){
+      var cx = parseFloat(d3.select(".handle").attr("cx"))
+      return x.invert(cx)
+    }
+    var slideAll = function(delay, duration, startYear) {
+      var i = d3.interpolate(startYear, 2016);
+      duration = duration * (2016-startYear)/(2016-2000)
       slider.transition()
         .ease(d3.easeLinear)
         .delay(delay)
-        .duration(duration - (duration * pauseValues.lastT))
+        .duration(duration)
         .tween("year", function() {
           return function(t) { 
             var totalLength = sliderPath.node().getTotalLength();
             year(i(t))
-            t += pauseValues.lastT;
-            console.log(pauseValues.lastT)
+            // // t += pauseValues.lastT;
+            // // console.log(pauseValues.lastT)
             var point = sliderPath.node().getPointAtLength(totalLength*t)
             if (i(t) == "2016") {
-              d3.select(".pause").attr("class", "button play")
+              d3.select(".button")
+                .classed("pause", false)
+                .classed("play", true)
             } 
-            // else if (d3.select(".pause_button").classed("pause")) { 
-            //   console.log('pause')
-            // }
           }
 
         })
-        // .on("end", function(){
-        //   pauseValues = {
-        //     lastT: 0,
-        //     currentT: 0
-        //   };
-        //  // transition()
-        // });
+
 
     }
-    slideAll(0, 0);
+    slideAll(0, 0, 2000);
 
     d3.select(".button")
       .on("click", function() {      
-            if (d3.select(".button").attr("class") == "button play") {
-             d3.select(".play").attr("class","button pause")
-               slideAll(0, 10000)
-            } else {console.log('pause')
-              d3.select(".pause").attr("class", "button play")
-            handle.transition().duration(0)
-              setTimeout(function(){
-                pauseValues.lastT = pauseValues.currentT;
-              }, 100);
+            if (d3.select(".button").classed("play") == true) {
+                d3.select(this)
+                  .classed("pause", true)
+                  .classed("play", false)
+               var startYear = (getYear() == 2016) ? 2000 : getYear()
+               slideAll(0, 10000, startYear)
+            } else {
+              d3.select(".slider").transition()
+              d3.select(this)
+                .classed("pause", false)
+                .classed("play", true)
             }
-
-     
         console.log((handle.attr("cx")/(sliderWidth))*16 + 2000)    
       })
 
@@ -450,11 +444,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             dropdown.selectAll("option").remove()
             dropdown.selectAll("option")
                 .data(descriptions.filter(function(d) {
-                  console.log(d.category == selectedCategory)
                   return d.category == selectedCategory
-            //       if (a.CZ.toLowerCase() < b.CZ.toLowerCase()) return -1;
-            // if (a.CZ.toLowerCase() > b.CZ.toLowerCase()) return 1;
-            // return 0;
               }))
               .enter()
               .append("option")
