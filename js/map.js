@@ -99,7 +99,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       });
     }
 
-    // var wrapWidth = (IS_MOBILE && !IS_PHONE) ? 220 : 100;
     var wrapWidth = (IS_PHONE) ? width*.78 : width*.31;
     var wrapWidthTitle = (IS_PHONE) ? width*.78 : width;
 
@@ -135,7 +134,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       });
 
     var addLegend = function() {
-    //  var gY = (container_width < 400) ? width*.05*i : width*.03*i;
       var legendColor = d3.scaleOrdinal()
         .range([ "#d2d2d2", "#1696d2", "#fdbf11"]);
       var legendText = ["None of highest-immigrant counties had the policy", "Some of highest-immigrant counties had the policy", "All of highest immigrant counties had the policy"]
@@ -174,7 +172,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     addLegend();
 
 
- //    //STATE TEXT INFO
+ // STATE TEXT INFO
     var stateTextX = (IS_PHONE) ? width*.09 : width*.26
     var svg2Width = (IS_PHONE) ? width*.9 : width*.33;
     var definition2_Y = (IS_PHONE) ? width*.45 : width*.565
@@ -274,9 +272,8 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             }))
             .text(function(d) {
               if (chartMap.map.classed("no_data") && slideYear() == '16') {
-                console.log(d.definition1);
                 return "No data"
-              } console.log(d.definition1);
+              }
               return d.description
             })
             .call(wrapText, wrapWidth)
@@ -286,9 +283,8 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             }))
             .text(function(d) {
               if (chartMap.map.classed("no_data") && slideYear() == '16') {
-                console.log(d.definition1);
                 return ""
-              } console.log(d.definition1);
+              }
               return d.definition1
             })
             .call(wrapText, wrapWidth)
@@ -392,8 +388,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           return function(t) { 
             var totalLength = sliderPath.node().getTotalLength();
             year(i(t))
-            // // t += pauseValues.lastT;
-            // // console.log(pauseValues.lastT)
             var point = sliderPath.node().getPointAtLength(totalLength*t)
             if (i(t) == "2016") {
               d3.select(".button")
@@ -422,7 +416,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
                 .classed("pause", false)
                 .classed("play", true)
             }
-        console.log((handle.attr("cx")/(sliderWidth))*16 + 2000)    
       })
 
 
@@ -459,9 +452,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       handle.attr("cx", x(selectedYear));
       var policyMenu = document.getElementById("dropdown-menu-policy");
       var selectedPolicy = policyMenu[policyMenu.selectedIndex].value
-      // var slideYearRounded = Math.round(selectedYear)
-      // selectedyear()
-      // var slideYear = slideYearRounded.toString().split('20')[1]
       stateText.select(".text-body-year")
         .text("20" + slideYear())
       changeProperties(selectedPolicy)
