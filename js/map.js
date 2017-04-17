@@ -203,10 +203,9 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
     function definition2_Y() {
         if (container_width >= 400 && container_width < 600) {
-           console.log(container_width);
         return textDescriptionHeader *3.8
       } else if (container_width < 400) {
-        console.log('2'); return textDescriptionHeader *5
+        return textDescriptionHeader *5
       } return width*.62
     }
 
