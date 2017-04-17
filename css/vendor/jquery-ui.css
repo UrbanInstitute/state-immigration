@@ -720,7 +720,7 @@ button.ui-button::-moz-focus-inner {
 	white-space: nowrap;
 	width: 14em;
 	height: 45px;
-   	background: url(../images/urban-select-2x.png) no-repeat right #EFEFEF;
+   	background: url(images/urban-select-2x.png) no-repeat right #EFEFEF;
    	background-size: 45px 45px;
 	border: none;   	
    	/*width: 45px;*/
@@ -995,7 +995,7 @@ a.ui-button:active,
 	color: #ffffff;
 }
 .ui-button:active{
-   	background: url(../images/urban-select-2x.png) no-repeat right #d2d2d2;
+   	background: url(images/urban-select-2x.png) no-repeat right #d2d2d2;
    	background-size: 45px 45px;
 }
 .ui-icon-background,
