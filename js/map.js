@@ -175,7 +175,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
  // STATE TEXT INFO
     var stateTextX = (IS_PHONE) ? width*.09 : width*.26
     var svg2Width = (IS_PHONE) ? width*.9 : width*.33;
-    var definition2_Y = (IS_PHONE) ? width*.45 : width*.565
+   // var definition2_Y = (IS_PHONE) ? width*.45 : width*.565
 
     chartMap.svg2 = d3.select("#map")
           .append("svg")
@@ -191,8 +191,26 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           })  
     var textStart = 0
     var textDescriptionHeader = (container_width < 400) ? width*.17 : width*.12
-    var definition1_Y = (container_width < 400) ? textDescriptionHeader *4 : width*.57
-    var definition2_Y = (container_width < 400) ? textDescriptionHeader *4.5 : width*.63
+    function definition1_Y() {
+        if (container_width >= 400 && container_width < 600) {
+        return textDescriptionHeader *3.5
+      } else if (container_width < 400) {
+          return textDescriptionHeader *4.7
+      } return width*.55
+    }
+
+    var definition1_Y = definition1_Y();
+
+    function definition2_Y() {
+        if (container_width >= 400 && container_width < 600) {
+           console.log(container_width);
+        return textDescriptionHeader *3.8
+      } else if (container_width < 400) {
+        console.log('2'); return textDescriptionHeader *5
+      } return width*.62
+    }
+
+    var definition2_Y = definition2_Y();
 
     var textYearHeader = (container_width < 400) ? width*.02 : width*.02
 
