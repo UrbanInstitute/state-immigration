@@ -236,6 +236,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           },
          change: function(event, d){
             var selectedPolicy = this.value
+            console.log(selectedPolicy);
             changeProperties(selectedPolicy)
           }
       })     
@@ -259,7 +260,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             .data(legendColor.range())
             .enter()
             .append("g")
-            .attr("transform", function(d,i) { console.log(i);
+            .attr("transform", function(d,i) { 
               return "translate(0,"+ ((container_width < 400) ? width*.04*i : width*.03*i) + ")"; 
             })
             .attr("class", function(d, i) {
@@ -281,11 +282,10 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               }))
               .attr("x", legendTextX)
               .attr("y", legendTextY)
-              .attr("class", function(d, i) { console.log(i)
+              .attr("class", function(d, i) { 
                 return "legend-text legend-text-" + i
               })
               .text(function(d, i) { 
-                console.log(i)
                 return d["legend" + i]             
               });
           }
@@ -295,10 +295,10 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         addLegend();
 
           chartMap.map
-            .style("fill", function(d) {
+            .style("fill", function(d) { console.log(selectedPolicy + "_" + slideYear());
                 return color(d["properties"][selectedPolicy + "_" + slideYear()]);
             })
-            .classed("no_data", function(d) {
+            .classed("no_data", function(d) { console.log(d["properties"][selectedPolicy + "_00"]);
               if ((d["properties"][selectedPolicy + "_" + "16"] == null) && slideYear() == '16') {
                 return true
               }
