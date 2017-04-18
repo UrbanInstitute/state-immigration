@@ -133,44 +133,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
         return d.properties.abbr;
       });
 
-    var addLegend = function() {
-      var legendColor = d3.scaleOrdinal()
-        .range([ "#d2d2d2", "#1696d2", "#fdbf11"]);
-      var legendText = ["None of highest-immigrant counties had the policy", "Some of highest-immigrant counties had the policy", "All of highest immigrant counties had the policy"]
-      var legendX = (IS_PHONE) ? 0 : width*.12
-      var legendY = (IS_PHONE) ? width*.93 : width*.56
-      var legend = chartMap.svg.append('g')
-          .attr("width", width*.2)
-          .attr("height", width*.2)
-          .attr("transform", function(d) { return "translate("+ legendX+ "," + legendY + ")"; })
-          .selectAll("g")
-          .data(legendColor.range())
-          .enter()
-          .append("g")
-          .attr("transform", function(d,i) {
-            return "translate(0,"+ ((container_width < 400) ? width*.04*i : width*.03*i) + ")"; 
-          })
-          .attr("class", "legend")
-
-        legend.append("rect")
-          .attr("width", width*.02 + "px")
-          .attr("height", width*.02 + "px")
-          .style("fill", legendColor);
-
-      var legendTextX = (IS_PHONE) ? width*.035 : width*.025
-      var legendTextY = (IS_PHONE) ? width*.017 : width*.015
-      legend.append("text")
-          .data(legendText)
-          .attr("x", legendTextX)
-          .attr("y", legendTextY)
-          .attr("class", "legend-text")
-          .text(function(d) { 
-            return d
-          });
-    }
-
-    addLegend();
-
 
  // STATE TEXT INFO
     var stateTextX = (IS_PHONE) ? width*.09 : width*.26
@@ -282,6 +244,56 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .addClass( "ui-menu-icons customicons" );
 
   var changeProperties = function(selectedPolicy) {
+
+        var addLegend = function() {
+          var legendColor = d3.scaleOrdinal()
+            .range([ "#d2d2d2", "#1696d2", "#fdbf11"]);
+       //   var legendText = ["None of highest-immigrant counties had the policy", "Some of highest-immigrant counties had the policy", "All of highest immigrant counties had the policy"]
+          var legendX = (IS_PHONE) ? 0 : width*.12
+          var legendY = (IS_PHONE) ? width*.93 : width*.56
+          var legend = chartMap.svg.append('g')
+            .attr("width", width*.2)
+            .attr("height", width*.2)
+            .attr("transform", function(d) { return "translate("+ legendX+ "," + legendY + ")"; })
+            .selectAll("g")
+            .data(legendColor.range())
+            .enter()
+            .append("g")
+            .attr("transform", function(d,i) { console.log(i);
+              return "translate(0,"+ ((container_width < 400) ? width*.04*i : width*.03*i) + ")"; 
+            })
+            .attr("class", function(d, i) {
+              return "legend" + i
+            })
+
+          legend.append("rect")
+            .attr("width", width*.02 + "px")
+            .attr("height", width*.02 + "px")
+            .style("fill", legendColor);
+
+          var legendTextX = (IS_PHONE) ? width*.035 : width*.025
+          var legendTextY = (IS_PHONE) ? width*.017 : width*.015
+          for (i=0; i<=2; i++) {
+            d3.select(".legend" + i).append("text")
+              //.data(legendText)
+              .data(descriptions.filter(function(d) { 
+                return selectedPolicy == d.policy_short
+              }))
+              .attr("x", legendTextX)
+              .attr("y", legendTextY)
+              .attr("class", function(d, i) { console.log(i)
+                return "legend-text legend-text-" + i
+              })
+              .text(function(d, i) { 
+                console.log(i)
+                return d["legend" + i]             
+              });
+          }
+
+        }
+
+        addLegend();
+
           chartMap.map
             .style("fill", function(d) {
                 return color(d["properties"][selectedPolicy + "_" + slideYear()]);
