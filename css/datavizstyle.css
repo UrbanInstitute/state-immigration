@@ -371,6 +371,15 @@ fill:#fdbf11 !important;
   border: 1px solid #003eff !important;
   }
 
+  .ui-menu .ui-menu-item-wrapper {
+    padding: 3px .4em 3px .4em !important;
+}
+
+
+
+
+
+
 
 
 }
