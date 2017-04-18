@@ -240,7 +240,9 @@ body{
 
 .text-policy-subtitle {
   fill: #ec008b;
+  font-size: 13px;
 }
+
 }
 .text-body-description {
   font-size: 13px;
@@ -314,6 +316,10 @@ fill:#fdbf11 !important;
   .ui-selectmenu-button.ui-button {
     width: 10em !important;
   }
+
+  .text-policy-subtitle {
+  font-size: 11px;
+  }
   #category-buttons-div {
     min-height: 100px;
     height: auto;
@@ -360,6 +366,9 @@ fill:#fdbf11 !important;
 
   .button {
     margin-top: .8em !important;
+  }
+  .ui-state-active {
+  border: 1px solid #003eff !important;
   }
 
 

@@ -241,7 +241,16 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .attr("transform", function() { return "translate("+ textStart+", " + definition2_Y + ")"; })
       .text("") 
 
-    var titleY = (IS_PHONE) ? width*.06 : width*.03;
+    var titleY = (IS_PHONE) ? width*.06 : width*.022;
+    function subtitleY() {
+      if ((IS_PHONE) && (container_width >= 400)) {
+        return width*.1
+      }  else if (container_width <400) {
+        return width*.15
+      } return width*.075
+    }
+
+    var subtitleY = subtitleY();
 
     chartMap.svg.append("text") 
       .attr("class", "text-policy-title")
@@ -249,7 +258,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .text("") 
     chartMap.svg.append("text") 
       .attr("class", "text-policy-subtitle")
-      .attr("transform", function() { return "translate("+ 0 +", " + width*.075 + ")"; })
+      .attr("transform", function() { return "translate("+ 0 +", " + subtitleY + ")"; })
       .text("") 
 
 
@@ -291,7 +300,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               if (chartMap.map.classed("no_data") && slideYear() == '16') {
                 return "No data"
               }
-              return d.description
+              return d.description 
             })
             .call(wrapText, wrapWidth)
           d3.select(".text-definition-1")
@@ -339,7 +348,8 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     var x = d3.scaleLinear()
         .domain([2000, 2016])
         .range([0, sliderWidth])
-        .clamp(true);
+        .clamp(true)
+     //   .snap(true);
     
     $("#slider-div").empty()
     var sliderX =  (container_width < 400) ? width*.17 : width* .12
@@ -466,7 +476,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       changeProperties(selectedPolicy);
       })
     function year(selectedYear) {
-      handle.attr("cx", x(selectedYear));
+      handle.attr("cx", x(Math.round(selectedYear)));
       var policyMenu = document.getElementById("dropdown-menu-policy");
       var selectedPolicy = policyMenu[policyMenu.selectedIndex].value
       stateText.select(".text-body-year")
