@@ -46,7 +46,7 @@ function drawGridMap(container_width){
   var projection = d3.geoEquirectangular()
     .scale((IS_PHONE) ? width*4 : width*2.7)
     .center([-96.03542,41.69553])
-    .translate(IS_PHONE ? [width /2.3, height /1.9] : [width /3.3, height /2.4]);
+    .translate(IS_PHONE ? [width /2.3, height /2.3] : [width /3.3, height /2.4]);
 
   var path = d3.geoPath()
     .projection(projection);
@@ -101,13 +101,15 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
     var wrapWidth = (IS_PHONE) ? width*.78 : width*.31;
     var wrapWidthTitle = (IS_PHONE) ? width*.78 : width;
+    var wrapWidthLegend = (IS_PHONE) ? width*.78 : width*.6;
 
     var mapWidth = (IS_PHONE) ? width*.9 : width*.65
 
     chartMap.svg = d3.select("#map")
       .append("svg")
       .attr("width", mapWidth)
-      .attr("height", height*1.1);
+      .attr("height", (container_width < 400 ? height* 1.2 : height*1.07))
+      .attr("transform", function(d) { return "translate(0,"+ ((container_width <400) ? -20 : 0) + ")"; })
 
     chartMap.map = chartMap.svg.append('g')
       .selectAll('path')
@@ -118,6 +120,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .attr('class', function(d) {
         return 'state ' + d.properties.abbr + ' dehovered '
       })
+
     chartMap.map
       .style("fill", "#fff")
     chartMap.svg
@@ -236,7 +239,6 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           },
          change: function(event, d){
             var selectedPolicy = this.value
-            console.log(selectedPolicy);
             changeProperties(selectedPolicy)
           }
       })     
@@ -245,35 +247,46 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .addClass( "ui-menu-icons customicons" );
 
   var changeProperties = function(selectedPolicy) {
-
-        var addLegend = function() {
+ 
+    var addLegend = function() {
           var legendColor = d3.scaleOrdinal()
             .range([ "#d2d2d2", "#1696d2", "#fdbf11"]);
+          var legendColor2 = d3.scaleOrdinal()
+            .range([ "#d2d2d2", "#1696d2", "#ffffff"]);
+
        //   var legendText = ["None of highest-immigrant counties had the policy", "Some of highest-immigrant counties had the policy", "All of highest immigrant counties had the policy"]
-          var legendX = (IS_PHONE) ? 0 : width*.12
-          var legendY = (IS_PHONE) ? width*.93 : width*.56
+      //THESE VARIABLES POSITION THE ENTIRE LEGEND:
+         var legendX = (IS_PHONE) ? width*.027 : width*.035
+         var legendY = (IS_PHONE) ? width*.83 : width*.56
+      //THESE VARIABLES POSITION EACH ROW: 
+       //  var legendXEach = (IS_PHONE) ? 0 : ((width*.2*i) - width*.085)
+         function legendYEach() {
+          if (container_width < 400) { console.log('1')
+            return width*.11
+          } return width*.06
+         }
+         var legendYEach = legendYEach();
+          d3.selectAll(".legend-row").selectAll("rect").remove()
+          
           var legend = chartMap.svg.append('g')
             .attr("width", width*.2)
             .attr("height", width*.2)
-            .attr("transform", function(d) { return "translate("+ legendX+ "," + legendY + ")"; })
+            .attr("transform", function(d) { console.log(legendX); return "translate("+ legendX+ "," + legendY + ")"; })
             .selectAll("g")
             .data(legendColor.range())
             .enter()
             .append("g")
-            .attr("transform", function(d,i) { 
-              return "translate(0,"+ ((container_width < 400) ? width*.04*i : width*.03*i) + ")"; 
+            .attr("transform", function(d,i) {
+              return "translate(0,"+ legendYEach*i + ")"; 
             })
             .attr("class", function(d, i) {
-              return "legend" + i
+              return "legend-row legend" + i 
             })
 
-          legend.append("rect")
-            .attr("width", width*.02 + "px")
-            .attr("height", width*.02 + "px")
-            .style("fill", legendColor);
-
-          var legendTextX = (IS_PHONE) ? width*.035 : width*.025
+          var legendTextX = (IS_PHONE) ? width*.01 : width*.035
           var legendTextY = (IS_PHONE) ? width*.017 : width*.015
+          
+          d3.selectAll(".legend-text").remove()
           for (i=0; i<=2; i++) {
             d3.select(".legend" + i).append("text")
               //.data(legendText)
@@ -282,23 +295,49 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               }))
               .attr("x", legendTextX)
               .attr("y", legendTextY)
-              .attr("class", function(d, i) { 
+              .attr("class", function(d) { 
                 return "legend-text legend-text-" + i
               })
-              .text(function(d, i) { 
+              .text(function(d) { 
                 return d["legend" + i]             
-              });
+              })
+              .call(wrapText, wrapWidthLegend)
           }
+          function legendColorScheme() {
+            if (d3.select(".legend2").text() !== "") { 
+              return legendColor
+            }               console.log(d3.select(".legend2").text());
+             return legendColor2
+          }
+          var legendColorScheme = legendColorScheme();
+
+          function rectY() {
+            if (container_width < 400) {
+              return -width*.014
+            }  return 0 
+          }
+
+          var rectY = rectY();
+
+          legend
+            .append("rect")
+            .attr("width", width*.02 + "px")
+            .attr("height", width*.02 + "px")
+            .style("fill", legendColorScheme)
+            .attr("transform", function(d,i) { console.log(width*.1);
+              return "translate("+ (width*-.026)+","+ rectY + ")"; 
+            })
+
 
         }
 
-        addLegend();
+    addLegend();
 
           chartMap.map
-            .style("fill", function(d) { console.log(selectedPolicy + "_" + slideYear());
+            .style("fill", function(d) { 
                 return color(d["properties"][selectedPolicy + "_" + slideYear()]);
             })
-            .classed("no_data", function(d) { console.log(d["properties"][selectedPolicy + "_00"]);
+            .classed("no_data", function(d) { 
               if ((d["properties"][selectedPolicy + "_" + "16"] == null) && slideYear() == '16') {
                 return true
               }
@@ -346,13 +385,13 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               return d.policy_long
             })
             .call(wrapText, wrapWidthTitle)
-          d3.select(".text-policy-subtitle")
-            .data(descriptions.filter(function(d) {
-              return selectedPolicy == d.policy_short
-            }))
-            .text(function(d) {
-              return d.policy_anti
-            })
+          // d3.select(".text-policy-subtitle")
+          //   .data(descriptions.filter(function(d) {
+          //     return selectedPolicy == d.policy_short
+          //   }))
+            // .text(function(d) {
+            //   return d.policy_anti
+            // })
   }
    
 /*SLIDER- thanks to https://bl.ocks.org/mbostock/6452972 */
