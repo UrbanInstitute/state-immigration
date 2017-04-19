@@ -271,7 +271,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           var legend = chartMap.svg.append('g')
             .attr("width", width*.2)
             .attr("height", width*.2)
-            .attr("transform", function(d) { console.log(legendX); return "translate("+ legendX+ "," + legendY + ")"; })
+            .attr("transform", function(d) { return "translate("+ legendX+ "," + legendY + ")"; })
             .selectAll("g")
             .data(legendColor.range())
             .enter()
@@ -306,7 +306,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           function legendColorScheme() {
             if (d3.select(".legend2").text() !== "") { 
               return legendColor
-            }               console.log(d3.select(".legend2").text());
+            }              
              return legendColor2
           }
           var legendColorScheme = legendColorScheme();
@@ -324,7 +324,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             .attr("width", width*.02 + "px")
             .attr("height", width*.02 + "px")
             .style("fill", legendColorScheme)
-            .attr("transform", function(d,i) { console.log(width*.1);
+            .attr("transform", function(d,i) {
               return "translate("+ (width*-.026)+","+ rectY + ")"; 
             })
 
