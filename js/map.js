@@ -254,22 +254,25 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
        //   var legendText = ["None of highest-immigrant counties had the policy", "Some of highest-immigrant counties had the policy", "All of highest immigrant counties had the policy"]
       //THESE VARIABLES POSITION THE ENTIRE LEGEND:
-         var legendX = (IS_PHONE) ? width*.027 : width*.035
-         var legendY = (IS_PHONE) ? width*.83 : width*.56
+          var legendX = (IS_PHONE) ? width*.027 : width*.035
+          var legendY = (IS_PHONE) ? width*.83 : width*.56
       //THESE VARIABLES POSITION EACH ROW: 
        //  var legendXEach = (IS_PHONE) ? 0 : ((width*.2*i) - width*.085)
-         function legendYEach() {
-          if (container_width < 400) { console.log('1')
-            return width*.11
-          } return width*.06
-         }
-         var legendYEach = legendYEach();
-          d3.selectAll(".legend-row").selectAll("rect").remove()
+          function legendYEach() {
+            if (container_width < 400) { console.log('1')
+              return width*.11
+            } return width*.06 
+           // return d3.select('.legend-text-0').node().getBoundingClientRect().height
+           }
+          var legendYEach = legendYEach();
           
+          d3.select(".legendG").remove()
+
           var legend = chartMap.svg.append('g')
             .attr("width", width*.2)
             .attr("height", width*.2)
             .attr("transform", function(d) { return "translate("+ legendX+ "," + legendY + ")"; })
+            .attr("class", "legendG")
             .selectAll("g")
             .data(legendColor.range())
             .enter()
@@ -281,26 +284,42 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               return "legend-row legend" + i 
             })
 
-          var legendTextX = (IS_PHONE) ? width*.01 : width*.035
-          var legendTextY = (IS_PHONE) ? width*.017 : width*.015
-          
-          d3.selectAll(".legend-text").remove()
-          for (i=0; i<=2; i++) {
-            d3.select(".legend" + i).append("text")
-              //.data(legendText)
-              .data(descriptions.filter(function(d) { 
-                return selectedPolicy == d.policy_short
-              }))
-              .attr("x", legendTextX)
-              .attr("y", legendTextY)
-              .attr("class", function(d) { 
-                return "legend-text legend-text-" + i
-              })
-              .text(function(d) { 
-                return d["legend" + i]             
-              })
-              .call(wrapText, wrapWidthLegend)
-          }
+            var legendTextX = (IS_PHONE) ? width*.01 : width*.035
+            var legendTextY = (IS_PHONE) ? width*.017 : width*.015
+            
+            for (i=0; i<=2; i++) {
+              d3.select(".legend" + i).append("text")
+                //.data(legendText)
+                .data(descriptions.filter(function(d) { 
+                  return selectedPolicy == d.policy_short
+                }))
+                .attr("x", legendTextX)
+                .attr("y", legendTextY)
+                .attr("class", function(d) { 
+                  return "legend-text legend-text-" + i
+                })
+                .text(function(d) { 
+                  return d["legend" + i]             
+                })
+                .call(wrapText, wrapWidthLegend)
+                // .attr("transform", function(d,i) {
+                //   return "translate(0,"+ 300*i + ")"; 
+                // })
+
+          // d3.select(".legend-text-" + i)
+          //   .attr("transform", function(d,i) {console.log(d3.select('.legend' + previousRow).node().getBoundingClientRect().height * (i));  return "translate(0," + (d3.select('.legend-text-' + previousRow).node().getBoundingClientRect().height * (i) ) + ")"; })
+
+            }
+
+          var row1 = d3.select('.legend0').node().getBoundingClientRect().height
+          var row2 = d3.select('.legend1').node().getBoundingClientRect().height
+          var row3 = d3.select('.legend2').node().getBoundingClientRect().height
+
+          d3.select(".legend1")
+            .attr("transform", function(d,i) {   return "translate(0," + (d3.select('.legend0').node().getBoundingClientRect().height + 10 ) + ")"; })
+          d3.select(".legend2")
+            .attr("transform", function(d,i) {   return "translate(0," + (d3.select('.legend0').node().getBoundingClientRect().height + d3.select('.legend1').node().getBoundingClientRect().height + 20 ) + ")"; })
+
           function legendColorScheme() {
             if (d3.select(".legend2").text() !== "") { 
               return legendColor
@@ -312,22 +331,26 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           function rectY() {
             if (container_width < 400) {
               return -width*.014
-            }  return 0 
+            } return 0
           }
 
           var rectY = rectY();
+          
 
-          legend
+          d3.selectAll(".legend-row")
             .append("rect")
             .attr("width", width*.02 + "px")
             .attr("height", width*.02 + "px")
             .style("fill", legendColorScheme)
-            .attr("transform", function(d,i) {
-              return "translate("+ (width*-.026)+","+ rectY + ")"; 
+            .attr("transform", function(d) { 
+              return "translate("+ (width*-.026)+","+ rectY* i+ ")"; 
             })
+            .attr("class", "legend-rect")
+        
 
 
-        }
+    }
+
 
     addLegend();
 
@@ -352,7 +375,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               return d.description 
             })
             .call(wrapText, wrapWidth)
- console.log(d3.select('.text-body-description').node().getBoundingClientRect().height)
+          
           var descriptionHeight = d3.select('.text-body-description').node().getBoundingClientRect().height
           
           d3.select(".text-definition-1")
