@@ -20,6 +20,9 @@
 
 
 }
+.ui-menu .ui-menu-item-wrapper {
+    padding: 3px .4em 3px .4em !important;
+}
 
 .no_data {
   fill: #ffffff !important;
@@ -37,6 +40,9 @@
   margin-top: 7px !important;
 }
 
+.ui-state-active {
+  border: 1px solid #1696d2 !important;
+}
 
 #nav-options {
     position: relative;
@@ -367,13 +373,7 @@ fill:#fdbf11 !important;
   .button {
     margin-top: .8em !important;
   }
-  .ui-state-active {
-  border: 1px solid #003eff !important;
-  }
 
-  .ui-menu .ui-menu-item-wrapper {
-    padding: 3px .4em 3px .4em !important;
-}
 
 
 
