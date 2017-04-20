@@ -314,7 +314,7 @@ fill:#fdbf11 !important;
 @media (max-width: 479px) {
 
   .ui-selectmenu-button.ui-button {
-    width: 10em !important;
+    width: 17.3em !important;
   }
 
   .text-policy-subtitle {
@@ -326,7 +326,7 @@ fill:#fdbf11 !important;
   }
 
   .ui-selectmenu-text {
-    width: 90px !important;
+    width: 190px !important;
   }
 
   .ui-selectmenu-menu .ui-menu {

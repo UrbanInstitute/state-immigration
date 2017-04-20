@@ -100,7 +100,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     }
 
     var wrapWidth = (IS_PHONE) ? width*.78 : width*.31;
-    var wrapWidthTitle = (IS_PHONE) ? width*.78 : width;
+    var wrapWidthTitle = (IS_PHONE) ? width*.78 : width*.65;
     var wrapWidthLegend = (IS_PHONE) ? width*.78 : width*.6;
 
     var mapWidth = (IS_PHONE) ? width*.9 : width*.65
