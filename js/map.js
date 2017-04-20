@@ -228,8 +228,8 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     $("#dropdown-menu-policy")
       .selectmenu({
          open: function( event, ui ) {
-            d3.select("body").style("height", (d3.select(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").node().getBoundingClientRect().height*12) + "px")
-            pymChild.sendHeight();
+            // d3.select("body").style("height", (d3.select(".ui-selectmenu-menu.ui-front.ui-selectmenu-open").node().getBoundingClientRect().height*6) + "px")
+            // pymChild.sendHeight();
           },
           close: function(event, ui){
             d3.select("body").style("height", null)
