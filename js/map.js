@@ -156,25 +156,25 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           })  
     var textStart = 0
     var textDescriptionHeader = (container_width < 400) ? width*.17 : width*.12
-    function definition1_Y() {
-        if (container_width >= 400 && container_width < 600) {
-        return textDescriptionHeader *3.5
-      } else if (container_width < 400) {
-          return textDescriptionHeader *4.7
-      } return width*.55
-    }
+    // function definition1_Y() {
+    //     if (container_width >= 400 && container_width < 600) {
+    //     return textDescriptionHeader *3.5
+    //   } else if (container_width < 400) {
+    //       return textDescriptionHeader *4.7
+    //   } return width*.55
+    // }
 
-    var definition1_Y = definition1_Y();
+    // var definition1_Y = definition1_Y();
 
-    function definition2_Y() {
-        if (container_width >= 400 && container_width < 600) {
-        return textDescriptionHeader *3.8
-      } else if (container_width < 400) {
-        return textDescriptionHeader *5
-      } return width*.62
-    }
+    // function definition2_Y() {
+    //     if (container_width >= 400 && container_width < 600) {
+    //     return textDescriptionHeader *3.8
+    //   } else if (container_width < 400) {
+    //     return textDescriptionHeader *5
+    //   } return width*.62
+    // }
 
-    var definition2_Y = definition2_Y();
+    // var definition2_Y = definition2_Y();
 
     var textYearHeader = (container_width < 400) ? width*.02 : width*.02
 
@@ -199,11 +199,9 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
     stateText.append("text") 
       .attr("class", "text-definition-1")
-      .attr("transform", function() { return "translate("+ textStart+", " + definition1_Y + ")"; })
       .text("") 
     stateText.append("text") 
       .attr("class", "text-definition-2")
-      .attr("transform", function() { return "translate("+ textStart+", " + definition2_Y + ")"; })
       .text("") 
 
     var titleY = (IS_PHONE) ? width*.06 : width*.022;
@@ -250,7 +248,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
  
     var addLegend = function() {
           var legendColor = d3.scaleOrdinal()
-            .range([ "#d2d2d2", "#1696d2", "#fdbf11"]);
+            .range([ "#d2d2d2", "#fdbf11", "#1696d2"]);
           var legendColor2 = d3.scaleOrdinal()
             .range([ "#d2d2d2", "#1696d2", "#ffffff"]);
 
@@ -350,10 +348,13 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             .text(function(d) {
               if (chartMap.map.classed("no_data") && slideYear() == '16') {
                 return "No data"
-              }
+              } 
               return d.description 
             })
             .call(wrapText, wrapWidth)
+ console.log(d3.select('.text-body-description').node().getBoundingClientRect().height)
+          var descriptionHeight = d3.select('.text-body-description').node().getBoundingClientRect().height
+          
           d3.select(".text-definition-1")
             .data(descriptions.filter(function(d) {
               return selectedPolicy == d.policy_short
@@ -365,6 +366,9 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               return d.definition1
             })
             .call(wrapText, wrapWidth)
+            .attr("transform", function() { return "translate("+ textStart+", " + ((textDescriptionHeader*1.25) + descriptionHeight + 20) + ")"; })
+
+     
           d3.select(".text-definition-2")
             .data(descriptions.filter(function(d) {
               return selectedPolicy == d.policy_short
@@ -376,6 +380,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               return d.definition2
             })
             .call(wrapText, wrapWidth)
+            .attr("transform", function() { return "translate("+ textStart+", " + ((textDescriptionHeader*1.25) + descriptionHeight + 60) + ")"; })
 
           d3.select(".text-policy-title")
             .data(descriptions.filter(function(d) {
@@ -392,6 +397,8 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             // .text(function(d) {
             //   return d.policy_anti
             // })
+
+
   }
    
 /*SLIDER- thanks to https://bl.ocks.org/mbostock/6452972 */
