@@ -20,6 +20,10 @@
 
 
 }
+
+.ui-selectmenu-text {
+  font-size: 14px !important;
+}
 .ui-menu .ui-menu-item-wrapper {
     padding: 3px .4em 3px .4em !important;
 }
@@ -31,12 +35,12 @@
 
 
 .ui-selectmenu-button.ui-button {
-  height: 35px !important;
-  width: 350px !important;
+  height: 30px !important;
+  width: 425px !important;
 }
 
 .ui-selectmenu-text {
-  width: 300px !important;
+  width: 390px !important;
   margin-top: 7px !important;
 }
 
@@ -86,7 +90,7 @@
   height: 80px;
 }
 #dropdown-menu-policy-button {
-  margin-top: 1em;
+  margin-top: .5em;
   right: 0px;
 }
 
@@ -96,7 +100,7 @@
 }
 
 .category_button {
-    margin-top: 2.5em;
+    margin-top: 2em;
     padding: 5 10 5 10px;
     float: left;
     margin-right: .5em;
@@ -163,7 +167,7 @@
 
 
 .ui-selectmenu-menu .ui-menu  {
-  width: 375px !important;
+  width: 449px !important;
 }
 
 
@@ -224,6 +228,7 @@ svg.legend-text-div {
   font-family: "Lato", sans-serif;
   font-size: 14px;
   font-weight: 700;
+  margin-top: 15px;
 }
 .header.policies {
 
@@ -336,7 +341,7 @@ fill:#fdbf11 !important;
   }
 
   .ui-selectmenu-menu .ui-menu {
-    width: 156px !important;
+    width: 254px !important;
   }
 
   #inset {
