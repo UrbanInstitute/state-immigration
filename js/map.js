@@ -370,14 +370,15 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             }))
             .text(function(d) {
               if (chartMap.map.classed("no_data") && slideYear() == '16') {
-                return "No data"
+                return "No policy information available for 2016."
               } 
               return d.description 
             })
             .call(wrapText, wrapWidth)
           
-          var descriptionHeight = d3.select('.text-body-description').node().getBoundingClientRect().height
-          
+          var descriptionHeight = d3.select('.text-body-description').node().getBoundingClientRect().height + 20
+
+
           d3.select(".text-definition-1")
             .data(descriptions.filter(function(d) {
               return selectedPolicy == d.policy_short
@@ -391,7 +392,8 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             .call(wrapText, wrapWidth)
             .attr("transform", function() { return "translate("+ textStart+", " + ((textDescriptionHeader*1.25) + descriptionHeight + 20) + ")"; })
 
-     
+          var definition1Height = d3.select('.text-definition-1').node().getBoundingClientRect().height
+
           d3.select(".text-definition-2")
             .data(descriptions.filter(function(d) {
               return selectedPolicy == d.policy_short
@@ -403,7 +405,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               return d.definition2
             })
             .call(wrapText, wrapWidth)
-            .attr("transform", function() { return "translate("+ textStart+", " + ((textDescriptionHeader*1.25) + descriptionHeight + 60) + ")"; })
+            .attr("transform", function() { return "translate("+ textStart+", " + ((textDescriptionHeader*1.25) + definition1Height + descriptionHeight + 30) + ")"; })
 
           d3.select(".text-policy-title")
             .data(descriptions.filter(function(d) {
