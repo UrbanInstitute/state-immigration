@@ -353,9 +353,8 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
 
     addLegend();
-
           chartMap.map
-            .style("fill", function(d) { 
+            .style("fill", function(d) { console.log(d.properties[selectedPolicy + "_" + slideYear()])
                 return color(d["properties"][selectedPolicy + "_" + slideYear()]);
             })
             .classed("no_data", function(d) { 
