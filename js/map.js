@@ -57,7 +57,7 @@ function drawGridMap(container_width){
 
   /*DATA SOURCES*/
 
-d3.json("data/combined-data-correct.geojson", function(error1, states) {
+d3.json("data/combined-data.geojson", function(error1, states) {
   d3.csv("data/policy_descriptions_only.csv", function(error2, descriptions) {
 
   
