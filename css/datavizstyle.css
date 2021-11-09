@@ -28,10 +28,10 @@
     padding: 3px .4em 3px .4em !important;
 }
 
-.no_data {
+/* .no_data {
   fill: #ffffff !important;
   stroke: #d2d2d2 !important;
-}
+} */
 
 
 .ui-selectmenu-button.ui-button {
@@ -85,7 +85,7 @@
 }
 
 .dropdown-container {
-  float:right; 
+  float:right;
   width: 32%;
   height: 80px;
 }
@@ -232,7 +232,7 @@ svg.legend-text-div {
 }
 .header.policies {
 
-  
+
 }
 .text-subheader, .text-subheader-mobile {
   font-family: "Lato", sans-serif;
@@ -308,8 +308,6 @@ fill:#fdbf11 !important;
 
 .handle {
   fill: #1696d2;
-
-
 }
 
 /*ADJUSTING FOR SCREEN WIDTHS */
@@ -353,7 +351,7 @@ fill:#fdbf11 !important;
     border-left-style: none;
     padding-left: 0px !important;
   }
-  
+
   .place-label {
     font-size: 9px !important;
   }
@@ -401,7 +399,7 @@ fill:#fdbf11 !important;
   .place-label {
     font-size: 10px;
   }
-  
+
   #isPhone{
     display: block !important;
   }
@@ -426,7 +424,7 @@ fill:#fdbf11 !important;
 
 @media (max-width: 710px) {
   #category-buttons-div{
-  width:100%; 
+  width:100%;
   margin-bottom:20px:
   }
 
@@ -445,7 +443,7 @@ fill:#fdbf11 !important;
     display: block;
   }
 
- 
+
 
 
 
@@ -456,9 +454,3 @@ fill:#fdbf11 !important;
   @media (max-width: 1015px) {
 
   }
-
-
-
-
-
-

@@ -28,20 +28,20 @@ function drawGridMap(container_width){
       IS_PHONE = false
 
     }
-      
+
   var chartMap=this;
 
 
   var color = d3.scaleOrdinal()
-      .domain([0, 1, 2])
-      .range(["#d2d2d2", "#1696d2", "#fdbf11"]);
+      .domain([0, 1, 2, null])
+      .range(["#d2d2d2", "#1696d2", "#fdbf11", "ffffff"]);
 
   var $map = $("#map");
   var aspect_width = 25;
   var aspect_height = (IS_PHONE) ? 26 : 18;
   var margin = { top: 10, right: 5, bottom: 10, left: 5 };
-  var width= container_width - margin.left - margin.right; 
-  var height = Math.ceil((width * aspect_height) / aspect_width) - margin.top - margin.bottom; 
+  var width= container_width - margin.left - margin.right;
+  var height = Math.ceil((width * aspect_height) / aspect_width) - margin.top - margin.bottom;
 
   var projection = d3.geoEquirectangular()
     .scale((IS_PHONE) ? width*4 : width*2.7)
@@ -52,18 +52,12 @@ function drawGridMap(container_width){
     .projection(projection);
 
 
-
-
-
   /*DATA SOURCES*/
 
-d3.json("data/combined-data.geojson", function(error1, states) {
+d3.json("data/combined-data-test.geojson", function(error1, states) {
   d3.csv("data/policy_descriptions_only.csv", function(error2, descriptions) {
 
-  
-
         choropleth = new Choropleth(states, descriptions);
-
 
   });
 
@@ -109,7 +103,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .append("svg")
       .attr("width", mapWidth)
       .attr("height", (container_width < 400 ? height* 1.2 : height*1.07))
-      .attr("transform", function(d) { return "translate(0,"+ ((container_width <400) ? -20 : 0) + ")"; })
+      .attr("transform", function(d) { return "translate(0,"+ ((container_width < 400) ? -20 : 0) + ")"; })
 
     chartMap.map = chartMap.svg.append('g')
       .selectAll('path')
@@ -132,7 +126,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .attr("transform", function(d) { return "translate(" + path.centroid(d) + ")"; })
       .attr("dy", ".5em")
       .attr("dx", "-.7em")
-      .text(function(d) { 
+      .text(function(d) {
         return d.properties.abbr;
       });
 
@@ -152,8 +146,8 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           .attr("transform", function() {
             if (IS_PHONE) {
               return "translate("+ 0 +", " + width*.02 + ")"
-            }; 
-          })  
+            };
+          })
     var textStart = 0
     var textDescriptionHeader = (container_width < 400) ? width*.17 : width*.12
     // function definition1_Y() {
@@ -186,23 +180,23 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       .attr("class", "header")
       .attr("transform", function() { return "translate("+ textStart+", " + textDescriptionHeader + ")"; })
       .text("POLICY DESCRIPTION")
-  
+
     stateText.append("text")
       .attr("class", "text-body-year")
       .attr("transform", function() { return "translate("+ textStart+", " + (textYearHeader*3.4) + ")"; })
-      .text("")  
-  
+      .text("")
+
     stateText.append("text")
       .attr("class", "text-body-description")
       .attr("transform", function() { return "translate("+ textStart+", " + (textDescriptionHeader*1.25)+ ")"; })
-      .text("") 
+      .text("")
 
-    stateText.append("text") 
+    stateText.append("text")
       .attr("class", "text-definition-1")
-      .text("") 
-    stateText.append("text") 
+      .text("")
+    stateText.append("text")
       .attr("class", "text-definition-2")
-      .text("") 
+      .text("")
 
     var titleY = (IS_PHONE) ? width*.06 : width*.022;
     function subtitleY() {
@@ -215,14 +209,14 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
     var subtitleY = subtitleY();
 
-    chartMap.svg.append("text") 
+    chartMap.svg.append("text")
       .attr("class", "text-policy-title")
       .attr("transform", function() { return "translate("+ 0 +", " + titleY + ")"; })
-      .text("") 
-    chartMap.svg.append("text") 
+      .text("")
+    chartMap.svg.append("text")
       .attr("class", "text-policy-subtitle")
       .attr("transform", function() { return "translate("+ 0 +", " + subtitleY + ")"; })
-      .text("") 
+      .text("")
 
 
     $("#dropdown-menu-policy")
@@ -239,13 +233,13 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             var selectedPolicy = this.value
             changeProperties(selectedPolicy)
           }
-      })     
-                  
+      })
+
       .selectmenu( "menuWidget" )
       .addClass( "ui-menu-icons customicons" );
 
   var changeProperties = function(selectedPolicy) {
- 
+
     var addLegend = function() {
           var legendColor = d3.scaleOrdinal()
             .range([ "#d2d2d2", "#fdbf11", "#1696d2"]);
@@ -256,16 +250,16 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       //THESE VARIABLES POSITION THE ENTIRE LEGEND:
           var legendX = (IS_PHONE) ? width*.027 : width*.035
           var legendY = (IS_PHONE) ? width*.83 : width*.56
-      //THESE VARIABLES POSITION EACH ROW: 
+      //THESE VARIABLES POSITION EACH ROW:
        //  var legendXEach = (IS_PHONE) ? 0 : ((width*.2*i) - width*.085)
           function legendYEach() {
-            if (container_width < 400) { console.log('1')
+            if (container_width < 400) {
               return width*.11
-            } return width*.06 
+            } return width*.06
            // return d3.select('.legend-text-0').node().getBoundingClientRect().height
            }
           var legendYEach = legendYEach();
-          
+
           d3.select(".legendG").remove()
 
           var legend = chartMap.svg.append('g')
@@ -278,32 +272,32 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             .enter()
             .append("g")
             .attr("transform", function(d,i) {
-              return "translate(0,"+ legendYEach*i + ")"; 
+              return "translate(0,"+ legendYEach*i + ")";
             })
             .attr("class", function(d, i) {
-              return "legend-row legend" + i 
+              return "legend-row legend" + i
             })
 
             var legendTextX = (IS_PHONE) ? width*.01 : width*.035
             var legendTextY = (IS_PHONE) ? width*.017 : width*.015
-            
+
             for (i=0; i<=2; i++) {
               d3.select(".legend" + i).append("text")
                 //.data(legendText)
-                .data(descriptions.filter(function(d) { 
+                .data(descriptions.filter(function(d) {
                   return selectedPolicy == d.policy_short
                 }))
                 .attr("x", legendTextX)
                 .attr("y", legendTextY)
-                .attr("class", function(d) { 
+                .attr("class", function(d) {
                   return "legend-text legend-text-" + i
                 })
-                .text(function(d) { 
-                  return d["legend" + i]             
+                .text(function(d) {
+                  return d["legend" + i]
                 })
                 .call(wrapText, wrapWidthLegend)
                 // .attr("transform", function(d,i) {
-                //   return "translate(0,"+ 300*i + ")"; 
+                //   return "translate(0,"+ 300*i + ")";
                 // })
 
           // d3.select(".legend-text-" + i)
@@ -321,9 +315,9 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             .attr("transform", function(d,i) {   return "translate(0," + (d3.select('.legend0').node().getBoundingClientRect().height + d3.select('.legend1').node().getBoundingClientRect().height + 20 ) + ")"; })
 
           function legendColorScheme() {
-            if (d3.select(".legend2").text() !== "") { 
+            if (d3.select(".legend2").text() !== "") {
               return legendColor
-            }              
+            }
              return legendColor2
           }
           var legendColorScheme = legendColorScheme();
@@ -335,18 +329,18 @@ d3.json("data/combined-data.geojson", function(error1, states) {
           }
 
           var rectY = rectY();
-          
+
 
           d3.selectAll(".legend-row")
             .append("rect")
             .attr("width", width*.02 + "px")
             .attr("height", width*.02 + "px")
             .style("fill", legendColorScheme)
-            .attr("transform", function(d) { 
-              return "translate("+ (width*-.026)+","+ rectY* i+ ")"; 
+            .attr("transform", function(d) {
+              return "translate("+ (width*-.026)+","+ rectY* i+ ")";
             })
             .attr("class", "legend-rect")
-        
+
 
 
     }
@@ -354,14 +348,26 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
     addLegend();
           chartMap.map
-            .style("fill", function(d) { console.log(d.properties[selectedPolicy + "_" + slideYear()])
-                return color(d["properties"][selectedPolicy + "_" + slideYear()]);
+            .style("fill", function(d) {
+                console.log(d["properties"][selectedPolicy + "_" + slideYear()])
+                if(d["properties"][selectedPolicy + "_" + slideYear()] === null) {
+                  return "#ffffff";
+                } else {
+                  return color(d["properties"][selectedPolicy + "_" + slideYear()]);
+                }
             })
-            .classed("no_data", function(d) { 
-              if ((d["properties"][selectedPolicy + "_" + "16"] == null) && slideYear() == '16') {
-                return true
+            // .classed("no_data", function(d) {
+            //   if ((d["properties"][selectedPolicy + "_" + "16"] == null) && slideYear() == '16') {
+            //     return true
+            //   }
+            //   return false
+            // })
+            .style("stroke", function(d) {
+              if(d["properties"][selectedPolicy + "_" + slideYear()] === null) {
+                return "#d2d2d2";
+              } else {
+                
               }
-              return false
             })
           d3.select(".text-body-description")
             .data(descriptions.filter(function(d) {
@@ -370,11 +376,11 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             .text(function(d) {
               if (chartMap.map.classed("no_data") && slideYear() == '16') {
                 return "No policy information available for 2016."
-              } 
-              return d.description 
+              }
+              return d.description
             })
             .call(wrapText, wrapWidth)
-          
+
           var descriptionHeight = d3.select('.text-body-description').node().getBoundingClientRect().height + 20
 
 
@@ -400,7 +406,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
             .text(function(d) {
               if (chartMap.map.classed("no_data") && slideYear() == '16') {
                 return ""
-              } 
+              }
               return d.definition2
             })
             .call(wrapText, wrapWidth)
@@ -424,15 +430,15 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 
 
   }
-   
+
 /*SLIDER- thanks to https://bl.ocks.org/mbostock/6452972 */
     var sliderWidth = (container_width < 400) ? width*.71 : width*.85
     var x = d3.scaleLinear()
-        .domain([2000, 2016])
+        .domain([2000, 2020])
         .range([0, sliderWidth])
         .clamp(true)
      //   .snap(true);
-    
+
     $("#slider-div").empty()
     var sliderX =  (container_width < 400) ? width*.17 : width* .12
     var sliderSvg = d3.select("#slider-div")
@@ -458,23 +464,29 @@ d3.json("data/combined-data.geojson", function(error1, states) {
                 .classed("play", true)
               slider.interrupt();
             })
-            .on("start drag", function() { 
-              year(x.invert(d3.event.x)); 
+            .on("start drag", function() {
+              year(x.invert(d3.event.x));
             }));
-    
-    var tickText = ["'00", "'02", "'04", "'06", "'08", "'10", "'12", "'14", "'16"] 
+
+    var tickText = ["'00", "'02", "'04", "'06", "'08", "'10", "'12", "'14", "'16"]
     slider.insert("g", ".track-overlay")
         .attr("class", "ticks")
         .attr("transform", "translate(0," + 18 + ")")
       .selectAll("text")
-      .data(x.ticks(8))
+      .data(function(d) {
+        if (IS_PHONE) {
+          return x.ticks(5)
+        } else {
+          return x.ticks(8)
+        }
+      })
       .enter().append("text")
         .attr("x", x)
         .attr("text-anchor", "middle")
         .text(function(d) {
           if (IS_PHONE) {
-            return "'" + d.toString().split('20')[1]
-          }   return d; 
+            return "'" + d.toString().substring(2,4)
+          }   return d;
         });
 
     var handle = slider.insert("circle", ".track-overlay")
@@ -487,22 +499,22 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       return x.invert(cx)
     }
     var slideAll = function(delay, duration, startYear) {
-      var i = d3.interpolate(startYear, 2016);
-      duration = duration * (2016-startYear)/(2016-2000)
+      var i = d3.interpolate(startYear, 2020);
+      duration = duration * (2020-startYear)/(2020-2000)
       slider.transition()
         .ease(d3.easeLinear)
         .delay(delay)
         .duration(duration)
         .tween("year", function() {
-          return function(t) { 
+          return function(t) {
             var totalLength = sliderPath.node().getTotalLength();
             year(i(t))
             var point = sliderPath.node().getPointAtLength(totalLength*t)
-            if (i(t) == "2016") {
+            if (i(t) == "2020") {
               d3.select(".button")
                 .classed("pause", false)
                 .classed("play", true)
-            } 
+            }
           }
 
         })
@@ -512,12 +524,12 @@ d3.json("data/combined-data.geojson", function(error1, states) {
     slideAll(0, 0, 2000);
 
     d3.select(".button")
-      .on("click", function() {      
+      .on("click", function() {
             if (d3.select(".button").classed("play") == true) {
                 d3.select(this)
                   .classed("pause", true)
                   .classed("play", false)
-               var startYear = (getYear() == 2016) ? 2000 : getYear()
+               var startYear = (getYear() == 2020) ? 2000 : getYear()
                slideAll(0, 10000, startYear)
             } else {
               d3.select(".slider").transition()
@@ -554,7 +566,7 @@ d3.json("data/combined-data.geojson", function(error1, states) {
               .text(function(d){return d.policy_long;})
       $("#dropdown-menu-policy").selectmenu( "refresh" );
       var policyMenu = document.getElementById("dropdown-menu-policy");
-      var selectedPolicy = policyMenu[policyMenu.selectedIndex].value 
+      var selectedPolicy = policyMenu[policyMenu.selectedIndex].value
       changeProperties(selectedPolicy);
       })
     function year(selectedYear) {
@@ -564,16 +576,17 @@ d3.json("data/combined-data.geojson", function(error1, states) {
       stateText.select(".text-body-year")
         .text("20" + slideYear())
       changeProperties(selectedPolicy)
-   
+
     }
 
-  
+
 
 
     var slideYear = function() {
-      var xHandle = (handle.attr("cx")/(sliderWidth))*16 + 2000
+      var xHandle = (handle.attr("cx")/(sliderWidth))*20 + 2000
       var xHandleRounded = Math.round(xHandle)
-      var xHandleYear = xHandleRounded.toString().split('20')[1]
+      var xHandleYear = xHandleRounded.toString().substring(2, 4)
+
       return xHandleYear
     }
 
@@ -585,5 +598,3 @@ d3.json("data/combined-data.geojson", function(error1, states) {
 }
 
  var pymChild = new pym.Child({ renderCallback: drawGridMap, polling: 500 });
-
-
