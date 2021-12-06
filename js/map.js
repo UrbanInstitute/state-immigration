@@ -12,7 +12,7 @@ function drawGridMap(container_width){
     var margin = {
       top: 10,
       right: 0,
-      bottom: 10,
+      bottom: 0,
       left: 0
     };
   }
@@ -21,7 +21,7 @@ function drawGridMap(container_width){
     var margin = {
       top: 10,
       right: 0,
-      bottom: 10,
+      bottom: 0,
       left: 0
     };
   } else {
@@ -36,16 +36,16 @@ function drawGridMap(container_width){
   .range(["#d2d2d2", "#1696d2", "#fdbf11", "ffffff"]);
 
   var $map = $("#map");
-  var aspect_width = 25;
-  var aspect_height = (IS_PHONE) ? 26 : 18;
-  var margin = { top: 10, right: 5, bottom: 10, left: 5 };
+  var aspect_width = 20;
+  var aspect_height = (IS_PHONE) ? 17 : 10;
+  var margin = { top: 10, right: 0, bottom: 10, left: 0 };
   var width= container_width - margin.left - margin.right;
   var height = Math.ceil((width * aspect_height) / aspect_width) - margin.top - margin.bottom;
 
   var projection = d3.geoEquirectangular()
-  .scale((IS_PHONE) ? width*4 : width*2.8)
+  .scale((IS_PHONE) ? width*4.5 : width*2.8)
   .center([-96.03542,41.69553])
-  .translate(IS_PHONE ? [width /2.3, height /2.3] : [width /3.3, height / 3.4]);
+  .translate(IS_PHONE ? [width / 2.06, height /2] : [width /3.3, height / 2.3]);
 
   var path = d3.geoPath()
   .projection(projection);
@@ -66,42 +66,16 @@ function drawGridMap(container_width){
 
     $map.empty();
 
-
-    function wrapText(text, width) {
-      text.each(function() {
-        var text = d3.select(this),
-        words = text.text().split(/\s+/).reverse(),
-        word,
-        line = [],
-        lineNumber = 0,
-        lineHeight = (IS_PHONE) ? 1.1 : 1.5, // ems
-        y = width*.05,
-        x = 0,
-        dy = -0.8,
-        tspan = text.text(null).append("tspan").attr("x", x).attr("y", y).attr("dy", dy + "em");
-        while (word = words.pop()) {
-          line.push(word);
-          tspan.text(line.join(" "));
-          if (tspan.node().getComputedTextLength() > width) {
-            line.pop();
-            tspan.text(line.join(" "));
-            line = [word];
-            tspan = text.append("tspan").attr("x", x).attr("y", y).attr("dy", ++lineNumber * lineHeight + dy + "em").text(word);
-          }
-        }
-      });
-    }
-
     var wrapWidth = (IS_PHONE) ? width*.78 : width*.31;
     var wrapWidthTitle = (IS_PHONE) ? width*.78 : width*.65;
     var wrapWidthLegend = (IS_PHONE) ? width*.78 : width*.6;
 
-    var mapWidth = (IS_PHONE) ? width*.9 : width*.65
+    var mapWidth = (IS_PHONE) ? width : width*.65
 
     chartMap.svg = d3.select("#map")
     .append("svg")
     .attr("width", mapWidth)
-    .attr("height", (container_width < 400 ? height* 1.2 : height*1.07))
+    .attr("height", (container_width < 400 ? height : height))
     .attr("transform", function(d) { return "translate(0,"+ ((container_width < 400) ? -20 : 0) + ")"; })
 
     chartMap.map = chartMap.svg.append('g')
@@ -140,21 +114,7 @@ function drawGridMap(container_width){
     .append("div")
     .attr("class", "div-descritions")
 
-
     var stateText = divDescription;
-
-    var textStart = 0
-
-    var titleY = (IS_PHONE) ? width*.06 : width*.022;
-    function subtitleY() {
-      if ((IS_PHONE) && (container_width >= 400)) {
-        return width*.1
-      }  else if (container_width <400) {
-        return width*.15
-      } return width*.075
-    }
-
-    var subtitleY = subtitleY();
 
     titleChart = d3.select("#policy-text")
     .append("div")
@@ -185,138 +145,77 @@ function drawGridMap(container_width){
         var legendColor2 = d3.scaleOrdinal()
         .range(["#d2d2d2", "#1696d2", "#ffffff", "#ffffff"]);
 
-        // d3.select(".legendG").remove()
-
-        var legendContainer = d3.select("#legend-map")
-
-        legendContainer
-        .data(descriptions.filter(function(d) {
-          return selectedPolicy == d.policy_short
-        }))
-        .attr("id", function(d) {
-          console.log(d)
-        })
-
-
-
-        //THESE VARIABLES POSITION THE ENTIRE LEGEND:
-        var legendX = (IS_PHONE) ? width*.027 : width*.035
-        var legendY = (IS_PHONE) ? width*.83 : width*.56
-        //THESE VARIABLES POSITION EACH ROW:
-        function legendYEach() {
-          if (container_width < 400) {
-            return width*.11
-          } return width*.06
-        }
-        var legendYEach = legendYEach();
-
-        d3.select(".legendG").remove()
-
-        var legend = chartMap.svg.append('g')
-        .attr("width", width*.2)
-        .attr("height", width*.2)
-        .attr("transform", function(d) { return "translate("+ legendX+ "," + legendY + ")"; })
-        .attr("class", "legendG")
-
-        var subLegend = legend
-        .selectAll("g")
-        .data(legendColor.range())
-        .enter()
-        .append("g")
-        .attr("transform", function(d,i) {
-          return "translate(0,"+ legendYEach*i + ")";
-        })
-        .attr("class", function(d, i) {
-          return "legend-row legend" + i
-        })
-
-        var legendTextX = (IS_PHONE) ? width*.01 : width*.035
-        var legendTextY = (IS_PHONE) ? width*.017 : width*.015
-
-        for (i=0; i<=3; i++) {
-          var step = i;
-          d3.select(".legend" + i).append("text")
-          //.data(legendText)
+        for(t = 0; t < 4; t++) {
+          d3.select(".legend-block" + t)
           .data(descriptions.filter(function(d) {
             return selectedPolicy == d.policy_short
           }))
-          .attr("x", legendTextX)
-          .attr("y", legendTextY)
-          .attr("dy", "-0.5em")
-          .attr("class", function(d) {
-            return "legend-text legend-text-" + i
-          })
-          .text(function(d) {
-            if(step === 3) {
-              return "No data"
+          .html(function(d) {
+            if(t === 3) {
+              return "<div class='blockSquare'></div><p>No data</p>"
             } else {
-              return d["legend" + i]
+              return "<div class='blockSquare'></div><p>" + d["legend" + t] + "</p>"
             }
           })
-          .call(wrapText, wrapWidthLegend)
+
+          d3.select(".legend-block" + t).select("div")
+          .style("background", function(d) {
+            if(d.legend2 === "") {
+              if(t === 0) {
+                return legendColor2(0)
+              } else if(t === 1) {
+                return legendColor2(1)
+              } else if(t === 2) {
+                return legendColor2(2)
+              } else {
+                return legendColor2(3)
+              }
+            } else {
+              if(t === 0) {
+                return legendColor(0)
+              } else if(t === 1) {
+                return legendColor(1)
+              } else if(t === 2) {
+                return legendColor(2)
+              } else {
+                return legendColor(3)
+              }
+            }
+          })
+          .style("border", function(d) {
+            if(d.legend2 === "") {
+              if(t === 0) {
+                return "1px " + legendColor2(0) + " solid"
+              } else if(t === 1) {
+                return "1px " + legendColor2(1) + " solid"
+              } else if(t === 2) {
+                return "1px " + legendColor2(2) + " solid"
+              } else {
+                return "1px black solid"
+              }
+            } else {
+              if(t === 0) {
+                return "1px " + legendColor(0) + " solid"
+              } else if(t === 1) {
+                return "1px " + legendColor(1) + " solid"
+              } else if(t === 2) {
+                return "1px " + legendColor(2) + " solid"
+              } else {
+                return "1px black solid"
+              }
+            }
+          })
         }
 
-        var row1 = d3.select('.legend0').node().getBoundingClientRect().height
-        var row2 = d3.select('.legend1').node().getBoundingClientRect().height
-        var row3 = d3.select('.legend2').node().getBoundingClientRect().height
-        var row4 = d3.select('.legend3').node().getBoundingClientRect().height
+        var legend2Text2 = d3.select(".legend-block2").select("p").text();
 
-        var legend2Text = d3.select(".legend2").text();
-
-        if(legend2Text === "") {
-          d3.select(".legend2").attr("display", "none")
-
-          d3.select(".legend1")
-          .attr("transform", function(d,i) {   return "translate(0," + (d3.select('.legend0').node().getBoundingClientRect().height + 10 ) + ")"; })
-          d3.select(".legend3")
-          .attr("transform", function(d,i) {   return "translate(0," + (d3.select('.legend0').node().getBoundingClientRect().height + d3.select('.legend1').node().getBoundingClientRect().height + 20 ) + ")"; })
+        if(legend2Text2 === "") {
+          document.getElementsByClassName("legend-block2")[0].style.display = "none";
         } else {
-          d3.select(".legend1")
-          .attr("transform", function(d,i) {   return "translate(0," + (d3.select('.legend0').node().getBoundingClientRect().height + 10 ) + ")"; })
-          d3.select(".legend2")
-          .attr("transform", function(d,i) {   return "translate(0," + (d3.select('.legend0').node().getBoundingClientRect().height + d3.select('.legend1').node().getBoundingClientRect().height + 20 ) + ")"; })
-          d3.select(".legend3")
-          .attr("transform", function(d,i) {   return "translate(0," + (d3.select('.legend0').node().getBoundingClientRect().height + d3.select('.legend1').node().getBoundingClientRect().height + d3.select('.legend2').node().getBoundingClientRect().height + 30 ) + ")"; })
+          document.getElementsByClassName("legend-block2")[0].style.display = "block";
         }
 
-        d3.select(".legend1")
-        .attr("transform", function(d,i) {   return "translate(0," + (d3.select('.legend0').node().getBoundingClientRect().height + 10 ) + ")"; })
-        d3.select(".legend2")
-        .attr("transform", function(d,i) {   return "translate(0," + (d3.select('.legend0').node().getBoundingClientRect().height + d3.select('.legend1').node().getBoundingClientRect().height + 20 ) + ")"; })
-
-        function legendColorScheme() {
-          if (d3.select(".legend2").text() !== "") {
-            return legendColor
-          }
-          return legendColor2
-        }
-        var legendColorScheme = legendColorScheme();
-
-        function rectY() {
-          if (container_width < 400) {
-            return -width*.014
-          } return 0
-        }
-
-        var rectY = rectY();
-
-        d3.selectAll(".legend-row")
-        .append("rect")
-        .attr("width", width*.02 + "px")
-        .attr("height", width*.02 + "px")
-        .style("fill", legendColorScheme)
-        .style("stroke", function(d, i) {
-          if(i === 3) {
-            return "black"
-          } else {
-            return legendColorScheme
-          }
-        })
-        .attr("transform", function(d) {
-          return "translate("+ (width*-.026)+","+ rectY* i+ ")";
-        })
-        .attr("class", "legend-rect")
-      } // add legends ends here
+      } // addLegend ends here
 
       addLegend();
 
@@ -383,7 +282,7 @@ function drawGridMap(container_width){
     var sliderSvg = d3.select("#slider-div")
     .append("svg")
     .attr("width", width)
-    .attr("height", height*.18);
+    .attr("height", height *.38);
     var slider = sliderSvg.append("g")
     .attr("class", "slider")
     .attr("transform", "translate(" + sliderX + "," + width*.06 + ")");
@@ -509,7 +408,7 @@ function drawGridMap(container_width){
       var policyMenu = document.getElementById("dropdown-menu-policy");
       var selectedPolicy = policyMenu[policyMenu.selectedIndex].value
       d3.select(".text-body-year")
-        .html("20" + slideYear())
+      .html("20" + slideYear())
       changeProperties(selectedPolicy)
 
     }
@@ -531,17 +430,17 @@ var downloadMenu = document.getElementById("secondaryButton"),
 linksDownload = downloadMenu.getElementsByTagName("a");
 
 downloadMenu.addEventListener("mouseover", function(e) {
-    for(j=0; j < linksDownload.length; j++) {
-      linksDownload[j].style.display = "block";
-    }
+  for(j=0; j < linksDownload.length; j++) {
+    linksDownload[j].style.display = "block";
+  }
 
-    pymChild.sendHeight();
+  pymChild.sendHeight();
 })
 
 downloadMenu.addEventListener("mouseout", function(e) {
-    for(j=0; j < linksDownload.length; j++) {
-      linksDownload[j].style.display = "none";
-    }
+  for(j=0; j < linksDownload.length; j++) {
+    linksDownload[j].style.display = "none";
+  }
 
-    pymChild.sendHeight();
+  pymChild.sendHeight();
 })
