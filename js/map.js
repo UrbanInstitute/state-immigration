@@ -37,15 +37,15 @@ function drawGridMap(container_width){
 
   var $map = $("#map");
   var aspect_width = 20;
-  var aspect_height = (IS_PHONE) ? 17 : 10;
+  var aspect_height = (IS_PHONE) ? 17 : 9.7;
   var margin = { top: 10, right: 0, bottom: 10, left: 0 };
   var width= container_width - margin.left - margin.right;
   var height = Math.ceil((width * aspect_height) / aspect_width) - margin.top - margin.bottom;
 
   var projection = d3.geoEquirectangular()
-  .scale((IS_PHONE) ? width*4.5 : width*2.8)
+  .scale((IS_PHONE) ? width*4.4 : width*2.8)
   .center([-96.03542,41.69553])
-  .translate(IS_PHONE ? [width / 2.06, height /2] : [width /3.3, height / 2.3]);
+  .translate(IS_PHONE ? [width / 2.05, height /2] : [width /3.29, height / 2.3]);
 
   var path = d3.geoPath()
   .projection(projection);

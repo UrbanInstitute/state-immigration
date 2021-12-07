@@ -227,9 +227,9 @@ hr {
 
 #description-policy {
   display: inline-block;
-  max-width: 34%;
+  max-width: 33%;
   vertical-align: top;
-  margin-left: 2%;
+  margin-left: 3%;
 }
 
 #description-policy > .header {
