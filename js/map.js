@@ -32,8 +32,12 @@ function drawGridMap(container_width){
   var chartMap=this;
 
   var color = d3.scaleOrdinal()
-  .domain([0, 1, 2, null])
-  .range(["#d2d2d2", "#1696d2", "#fdbf11", "ffffff"]);
+  .domain([0, 1, 2])
+  .range(["#d2d2d2", "#1696d2", "#fdbf11"]);
+
+  var color2 = d3.scaleOrdinal()
+  .domain([0, 1, 2])
+  .range(["#d2d2d2", "#fdbf11", "#1696d2"]);
 
   var $map = $("#map");
   var aspect_width = 20;
@@ -45,7 +49,7 @@ function drawGridMap(container_width){
   var projection = d3.geoEquirectangular()
   .scale((IS_PHONE) ? width*4.4 : width*2.8)
   .center([-96.03542,41.69553])
-  .translate(IS_PHONE ? [width / 2.05, height /2] : [width /3.29, height / 2.3]);
+  .translate(IS_PHONE ? [width / 2.05, height /2] : [width /3.29, height / 2.25]);
 
   var path = d3.geoPath()
   .projection(projection);
@@ -221,8 +225,13 @@ function drawGridMap(container_width){
 
       chartMap.map
       .style("fill", function(d) {
+
+        console.log(selectedPolicy)
+
         if(d["properties"][selectedPolicy + "_" + slideYear()] === null) {
           return "#ffffff";
+        } else if(d["properties"][selectedPolicy + "_" + slideYear()] !== null && (selectedPolicy === "task" || selectedPolicy === "jail" || selectedPolicy === "warrant" || selectedPolicy === "e-verify" || selectedPolicy === "detainer")) {
+          return color2(d["properties"][selectedPolicy + "_" + slideYear()]);
         } else {
           return color(d["properties"][selectedPolicy + "_" + slideYear()]);
         }
