@@ -41,7 +41,6 @@ background-color: #9d9d9d;
 color: #fff !important;
 }
 
-
 #isPhone, #isMobile {
     display: none;
     width: 0;
@@ -60,12 +59,6 @@ color: #fff !important;
 .ui-menu .ui-menu-item-wrapper {
     padding: 3px .4em 3px .4em !important;
 }
-
-/* .no_data {
-  fill: #ffffff !important;
-  stroke: #d2d2d2 !important;
-} */
-
 
 .ui-selectmenu-button.ui-button {
   height: 30px !important;
@@ -122,6 +115,7 @@ color: #fff !important;
   width: 32%;
   height: 80px;
 }
+
 #dropdown-menu-policy-button {
   margin-top: .5em;
   right: 0px;
@@ -141,7 +135,6 @@ color: #fff !important;
     max-width: 60%;
     display: inline-block;
 }
-
 
 .category_button.active {
   background-color: #1696d2;
@@ -167,6 +160,7 @@ color: #fff !important;
 .button.play {
     background-image: url("../images/play.png");
 }
+
 .button.play:hover {
     background-image: url("../images/rolloverPlay.png");
 }
@@ -175,11 +169,9 @@ color: #fff !important;
     background-image: url("../images/pause.png");
 }
 
-
 .button.pause:hover {
     background-image: url("../images/rolloverPause.png");
 }
-
 
 .text-body-year {
   font-size: 16px;
@@ -188,7 +180,6 @@ color: #fff !important;
 .text-definition-1, .text-definition-2 {
   font-style: italic;
 }
-
 
 .ui-selectmenu-menu .ui-menu  {
   width: 449px !important;
@@ -304,7 +295,6 @@ svg.legend-text-div {
 }
 
 /*STATE SQUARE*/
-
 .state.selected {
 fill:#fdbf11 !important;
 }
@@ -316,8 +306,6 @@ fill:#fdbf11 !important;
     font-size: 14px;
     pointer-events: none;
  }
-
-
 
 /*SLIDER*/
 .track,
@@ -348,8 +336,6 @@ fill:#fdbf11 !important;
 }
 
 /*ADJUSTING FOR SCREEN WIDTHS */
-
-
 @media (max-width: 400px) {
 
   .dropdown-container {
@@ -404,7 +390,6 @@ fill:#fdbf11 !important;
   .text-policy-title {
     font-size: 14px;
   }
-
 
   .header.policies {
     margin-left: none !important;
@@ -463,9 +448,9 @@ fill:#fdbf11 !important;
     margin: 15px 0px;
   }
 
-
   #description-policy {
     max-width: 100%;
+    margin-left: 0;
   }
 
 }
@@ -483,7 +468,6 @@ fill:#fdbf11 !important;
     margin-top: 2em;
   }
 }
-
 
 @media (max-width: 768px){
   #isMobile {

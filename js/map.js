@@ -434,22 +434,3 @@ function drawGridMap(container_width){
 }
 
 var pymChild = new pym.Child({ renderCallback: drawGridMap, polling: 500 });
-
-var downloadMenu = document.getElementById("secondaryButton"),
-linksDownload = downloadMenu.getElementsByTagName("a");
-
-downloadMenu.addEventListener("mouseover", function(e) {
-  for(j=0; j < linksDownload.length; j++) {
-    linksDownload[j].style.display = "block";
-  }
-
-  pymChild.sendHeight();
-})
-
-downloadMenu.addEventListener("mouseout", function(e) {
-  for(j=0; j < linksDownload.length; j++) {
-    linksDownload[j].style.display = "none";
-  }
-
-  pymChild.sendHeight();
-})
