@@ -54,16 +54,12 @@ function drawGridMap(container_width){
   var path = d3.geoPath()
   .projection(projection);
 
-
   /*DATA SOURCES*/
-
   d3.json("data/combined-data.geojson", function(error1, states) {
     d3.csv("data/policy_descriptions_only.csv", function(error2, descriptions) {
 
       choropleth = new Choropleth(states, descriptions);
-
     });
-
   });
 
   function Choropleth(states, descriptions) {
@@ -226,8 +222,6 @@ function drawGridMap(container_width){
       chartMap.map
       .style("fill", function(d) {
 
-        console.log(selectedPolicy)
-
         if(d["properties"][selectedPolicy + "_" + slideYear()] === null) {
           return "#ffffff";
         } else if(d["properties"][selectedPolicy + "_" + slideYear()] !== null && (selectedPolicy === "task" || selectedPolicy === "jail" || selectedPolicy === "warrant" || selectedPolicy === "e-verify" || selectedPolicy === "detainer")) {
@@ -287,7 +281,7 @@ function drawGridMap(container_width){
 
     $("#slider-div").empty()
 
-    var sliderX =  (container_width < 400) ? width * .17 : width * .09
+    var sliderX =  (container_width < 400) ? width * .17 : width * .08
     var sliderSvg = d3.select("#slider-div")
     .append("svg")
     .attr("width", width)
