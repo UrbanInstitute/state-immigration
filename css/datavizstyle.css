@@ -227,6 +227,10 @@ hr {
   margin-top: 0px;
 }
 
+.header.policies {
+  margin-top: 20px;
+}
+
 #description-policy > .text-body-year {
   margin-top: 0px;
 }
@@ -365,7 +369,7 @@ fill:#fdbf11 !important;
   }
 
   .ui-selectmenu-menu .ui-menu {
-    width: 254px !important;
+    width: 270px !important;
   }
 
   #years-div {
