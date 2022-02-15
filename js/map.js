@@ -152,7 +152,7 @@ function drawGridMap(container_width){
           }))
           .html(function(d) {
             if(t === 3) {
-              return "<div class='blockSquare'></div><p>No data</p>"
+              return "<div class='blockSquare'></div><p>No data: see data download for details</p>"
             } else {
               return "<div class='blockSquare'></div><p>" + d["legend" + t] + "</p>"
             }
